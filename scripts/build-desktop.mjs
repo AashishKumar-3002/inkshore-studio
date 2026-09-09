@@ -44,9 +44,10 @@ for (const [from, to] of [
 for (const [from, to] of [
   [path.join(root, "drizzle"), path.join(standalone, "drizzle")],
   [
-    path.join(root, "scripts", "migrate-local.mjs"),
-    path.join(standalone, "migrate-local.mjs"),
+    path.join(root, "scripts", "migrate.mjs"),
+    path.join(standalone, "migrate.mjs"),
   ],
+  [path.join(root, "scripts", "lib"), path.join(standalone, "lib")],
 ]) {
   await rm(to, { recursive: true, force: true });
   await cp(from, to, { recursive: true });

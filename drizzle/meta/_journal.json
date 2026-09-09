@@ -26,13 +26,6 @@
     {
       "idx": 3,
       "version": "7",
-      "when": 1788941812645,
-      "tag": "0003_finalise_sort_keys",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
       "when": 1789636050910,
       "tag": "0004_chapter_assistant",
       "breakpoints": true
