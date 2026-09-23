@@ -447,62 +447,33 @@ export default function LandingSite({
             <article className={styles.downloadCard}>
               <PlatformIcon platform="mac" />
               <h3>macOS</h3>
-              <p>Apple Silicon & Intel · DMG</p>
+              <p>Apple Silicon · DMG</p>
               <a href={downloads.macArm ?? releaseLink}>
                 {downloads.macArm
                   ? "Download for Apple Silicon"
                   : "View macOS releases"}
                 <ArrowDownToLine size={16} />
               </a>
-              {downloads.macIntel && (
-                <a href={downloads.macIntel}>
-                  Download for Intel <ArrowDownToLine size={16} />
-                </a>
-              )}
+              <span className={styles.downloadSoon}>Intel Mac · Coming soon</span>
               <small>
-                {downloads.macArm || downloads.macIntel
+                {downloads.macArm
                   ? downloads.version
-                  : "Installers appear after publication"}
+                  : "Apple Silicon preview is awaiting publication"}
               </small>
             </article>
             <article className={styles.downloadCard}>
               <PlatformIcon platform="windows" />
               <h3>Windows</h3>
               <p>x64 · EXE installer</p>
-              <a href={downloads.windows ?? releaseLink}>
-                {downloads.windows
-                  ? "Download for Windows"
-                  : "View Windows releases"}
-                <ArrowDownToLine size={16} />
-              </a>
-              <small>
-                {downloads.windows
-                  ? downloads.version
-                  : "Installers appear after publication"}
-              </small>
+              <span className={styles.downloadSoon}>Coming soon</span>
+              <small>Windows preview is in preparation</small>
             </article>
             <article className={styles.downloadCard}>
               <PlatformIcon platform="linux" />
               <h3>Linux</h3>
               <p>x64 · AppImage & Debian</p>
-              <a href={downloads.appImage ?? downloads.deb ?? releaseLink}>
-                {downloads.appImage
-                  ? "Download AppImage"
-                  : downloads.deb
-                    ? "Download Debian package"
-                    : "View Linux releases"}
-                <ArrowDownToLine size={16} />
-              </a>
-              {downloads.appImage && downloads.deb && (
-                <a href={downloads.deb}>
-                  Download Debian package <ArrowDownToLine size={16} />
-                </a>
-              )}
-              <small>
-                {downloads.appImage || downloads.deb
-                  ? downloads.version
-                  : "Installers appear after publication"}
-              </small>
+              <span className={styles.downloadSoon}>Coming soon</span>
+              <small>Linux preview is in preparation</small>
             </article>
           </div>
           <p className={styles.downloadNotes}>
