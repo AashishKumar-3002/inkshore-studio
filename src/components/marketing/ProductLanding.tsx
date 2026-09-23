@@ -15,7 +15,7 @@ const releaseSchema = z.array(
 async function publishedDownloads(): Promise<DesktopDownloads> {
   try {
     const response = await fetch(
-      "https://api.github.com/repos/AashishKumar-3002/inkdrop-studio/releases?per_page=10",
+      "https://api.github.com/repos/AashishKumar-3002/inkshore-studio/releases?per_page=10",
       {
         headers: { Accept: "application/vnd.github+json" },
         next: { revalidate: 600 },
@@ -37,7 +37,7 @@ async function publishedDownloads(): Promise<DesktopDownloads> {
         (item) =>
           pattern.test(item.name) &&
           item.browser_download_url.startsWith(
-            "https://github.com/AashishKumar-3002/inkdrop-studio/releases/download/",
+            "https://github.com/AashishKumar-3002/inkshore-studio/releases/download/",
           ),
       )?.browser_download_url;
     return {

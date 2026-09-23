@@ -27,7 +27,7 @@ app.setAboutPanelOptions({
   applicationVersion: app.getVersion(),
   copyright: "Copyright © 2026 Aashish Kumar",
   authors: ["Aashish Kumar"],
-  website: "https://github.com/AashishKumar-3002/inkdrop-studio",
+  website: "https://github.com/AashishKumar-3002/inkshore-studio",
   iconPath: path.join(__dirname, "../build/icons/icon.png"),
 });
 
@@ -150,8 +150,8 @@ function buildMenu(appUrl) {
       role: "help",
       submenu: [
         ...(!isMac ? [{ label: "About Inkshore Studio", click: () => app.showAboutPanel() }] : []),
-        { label: "Documentation", click: () => shell.openExternal("https://github.com/AashishKumar-3002/inkdrop-studio#readme") },
-        { label: "Report an Issue", click: () => shell.openExternal("https://github.com/AashishKumar-3002/inkdrop-studio/issues") },
+        { label: "Documentation", click: () => shell.openExternal("https://github.com/AashishKumar-3002/inkshore-studio#readme") },
+        { label: "Report an Issue", click: () => shell.openExternal("https://github.com/AashishKumar-3002/inkshore-studio/issues") },
         { type: "separator" },
         {
           label: "Show Server Log",

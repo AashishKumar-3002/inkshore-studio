@@ -634,6 +634,19 @@
 .downloadCard a:hover {
   background: #e8ecd9;
 }
+.downloadSoon {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d3d7c8;
+  border-radius: 7px;
+  padding: 12px 15px;
+  font-size: 13px;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 8px;
+  color: #727a68;
+  background: #f2f3ec;
+}
 .downloadCard small {
   font-size: 11px;
   color: #727a68;
@@ -947,6 +960,7 @@
     margin: 2px 0 10px;
   }
   .downloadCard a,
+  .downloadSoon,
   .downloadCard small {
     grid-column: 1/-1;
   }
