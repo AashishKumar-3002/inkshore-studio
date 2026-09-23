@@ -112,10 +112,10 @@ async function startServer({ serverDir, dataDir, config, onLog = () => {} }) {
       HOSTNAME: "127.0.0.1",
       // Tells the app it's running inside the desktop shell, which is what
       // unlocks the Claude subscription provider.
-      INKDROP_DESKTOP: "1",
-      // Exactly one of these is set. INKDROP_DB_DIR selects the embedded
+      INKSHORE_DESKTOP: "1",
+      // Exactly one of these is set. INKSHORE_DB_DIR selects the embedded
       // PGlite database; DATABASE_URL selects a Postgres server.
-      INKDROP_DB_DIR: remote ? "" : dataDir,
+      INKSHORE_DB_DIR: remote ? "" : dataDir,
       DATABASE_URL: remote,
       DATABASE_SSL: config.databaseSsl ? "true" : "false",
       AUTH_SECRET: config.authSecret,

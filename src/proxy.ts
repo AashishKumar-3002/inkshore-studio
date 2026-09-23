@@ -17,7 +17,7 @@ const AUTH_ROUTES = ["/login", "/register"];
  * redirect to. The env var is set by the desktop shell alongside the
  * embedded database.
  */
-const singleUser = Boolean(process.env.INKDROP_DB_DIR);
+const singleUser = Boolean(process.env.INKSHORE_DB_DIR || process.env.INKDROP_DB_DIR);
 
 const SESSION_COOKIES = [
   "authjs.session-token",

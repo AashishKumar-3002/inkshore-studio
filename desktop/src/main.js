@@ -15,14 +15,15 @@ const {
 const { loadConfig, saveConfig } = require("./config");
 const { startServer } = require("./server");
 
-// Keep the existing library location when the visible app name is branded.
+// Keep the original Inkdrop-era library location so the rebrand never hides
+// an existing manuscript or resets a desktop installation.
 const libraryHome = path.join(app.getPath("appData"), "inkdrop-studio-desktop");
 fs.mkdirSync(libraryHome, { recursive: true });
 app.setPath("userData", libraryHome);
-app.setName("Inkdrop Studio");
-app.setAppUserModelId("studio.inkdrop.desktop");
+app.setName("Inkshore Studio");
+app.setAppUserModelId("studio.inkshore.desktop");
 app.setAboutPanelOptions({
-  applicationName: "Inkdrop Studio",
+  applicationName: "Inkshore Studio",
   applicationVersion: app.getVersion(),
   copyright: "Copyright © 2026 Aashish Kumar",
   authors: ["Aashish Kumar"],
@@ -44,12 +45,12 @@ const logLines = [];
 function log(line) {
   logLines.push(line);
   if (logLines.length > 500) logLines.shift();
-  if (process.env.INKDROP_DEBUG) console.log("[server]", line);
+  if (process.env.INKSHORE_DEBUG || process.env.INKDROP_DEBUG) console.log("[server]", line);
 }
 
 function createWindow() {
   const win = new BrowserWindow({
-    title: "Inkdrop Studio",
+    title: "Inkshore Studio",
     icon: path.join(__dirname, "../build/icons", process.platform === "win32" ? "icon.ico" : "icon.png"),
     width: 1280,
     height: 860,
@@ -148,7 +149,7 @@ function buildMenu(appUrl) {
     {
       role: "help",
       submenu: [
-        ...(!isMac ? [{ label: "About Inkdrop Studio", click: () => app.showAboutPanel() }] : []),
+        ...(!isMac ? [{ label: "About Inkshore Studio", click: () => app.showAboutPanel() }] : []),
         { label: "Documentation", click: () => shell.openExternal("https://github.com/AashishKumar-3002/inkdrop-studio#readme") },
         { label: "Report an Issue", click: () => shell.openExternal("https://github.com/AashishKumar-3002/inkdrop-studio/issues") },
         { type: "separator" },
@@ -184,7 +185,7 @@ function loadErrorScreen(win, message) {
          padding: 2px 6px; border-radius: 4px; }
 </style>
 <main>
-  <h1>Inkdrop couldn't start</h1>
+  <h1>Inkshore couldn't start</h1>
   <p>${message}</p>
   <p>Your work is stored in this folder, and reopening the app is safe:</p>
   <p><code>${app.getPath("userData")}</code></p>
@@ -221,11 +222,11 @@ async function boot() {
 
 /**
  * Headless smoke test for the shell, used by CI and by `npm run desktop:smoke`.
- * Set INKDROP_SMOKE to a PNG path: the app loads, screenshots itself, writes
+ * Set INKSHORE_SMOKE to a PNG path: the app loads, screenshots itself, writes
  * a short report and exits. Without the variable this is inert.
  */
 async function runSmokeTestIfRequested(appUrl) {
-  const out = process.env.INKDROP_SMOKE;
+  const out = process.env.INKSHORE_SMOKE || process.env.INKDROP_SMOKE;
   if (!out || !mainWindow) return;
   try {
     // Give the client bundle a beat to hydrate before capturing.
@@ -235,7 +236,7 @@ async function runSmokeTestIfRequested(appUrl) {
 
     const title = await mainWindow.webContents.executeJavaScript("document.title");
     const desktopFlag = await mainWindow.webContents.executeJavaScript(
-      "Boolean(window.inkdrop && window.inkdrop.isDesktop)"
+      "Boolean((window.inkshore && window.inkshore.isDesktop) || (window.inkdrop && window.inkdrop.isDesktop))"
     );
     console.log(
       JSON.stringify({ ok: true, url: appUrl, title, desktopBridge: desktopFlag, screenshot: out })
@@ -247,11 +248,11 @@ async function runSmokeTestIfRequested(appUrl) {
   }
 }
 
-ipcMain.handle("inkdrop:getConfig", () => {
+ipcMain.handle("inkshore:getConfig", () => {
   const { authSecret, encryptionKey, ...safe } = loadConfig();
   return safe;
 });
-ipcMain.handle("inkdrop:setDatabaseUrl", (_e, url) => {
+ipcMain.handle("inkshore:setDatabaseUrl", (_e, url) => {
   saveConfig({ databaseUrl: String(url || "") });
   return true;
 });

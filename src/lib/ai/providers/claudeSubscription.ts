@@ -19,7 +19,7 @@ import type { AIProvider, GenerateChapterRequest } from "../types";
 
 /** True when running inside the desktop shell, which sets this. */
 export function isDesktopRuntime(): boolean {
-  return process.env.INKDROP_DESKTOP === "1";
+  return process.env.INKSHORE_DESKTOP === "1" || process.env.INKDROP_DESKTOP === "1";
 }
 
 type TextDelta = { type: "text_delta"; text: string };
@@ -60,7 +60,7 @@ export const claudeSubscriptionProvider: AIProvider = {
   }: GenerateChapterRequest): Promise<string> {
     if (!isDesktopRuntime()) {
       throw new Error(
-        "Claude subscription mode is only available in the Inkdrop desktop app."
+        "Claude subscription mode is only available in the Inkshore desktop app."
       );
     }
 

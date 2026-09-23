@@ -116,7 +116,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          title="Inkdrop Studio $RELEASE_TAG"
+          title="Inktide Studio $RELEASE_TAG"
           prerelease=false
           if [[ "$RELEASE_TAG" == v0.* || "$RELEASE_TAG" == *-* ]]; then
             title="$title — Preview"

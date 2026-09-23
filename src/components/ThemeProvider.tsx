@@ -6,7 +6,8 @@ import { cn } from "./ui";
 
 type Theme = "light" | "dark" | "system";
 
-const STORAGE_KEY = "inkdrop-theme";
+const STORAGE_KEY = "inkshore-theme";
+const LEGACY_STORAGE_KEY = "inkdrop-theme";
 
 const ThemeContext = React.createContext<{
   theme: Theme;
@@ -32,7 +33,7 @@ function applyTheme(theme: Theme) {
  * Runs before React hydrates, so the correct theme is painted on the very
  * first frame instead of flashing light-then-dark.
  */
-export const themeScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEY}")||"system";var d=t==="dark"||(t==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d);}catch(e){}})();`;
+export const themeScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEY}")||localStorage.getItem("${LEGACY_STORAGE_KEY}")||"system";var d=t==="dark"||(t==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d);}catch(e){}})();`;
 
 /**
  * localStorage is an external store, so the theme is read through
@@ -56,7 +57,11 @@ const themeStore = {
   },
   getSnapshot(): Theme {
     try {
-      return (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "system";
+      return (
+        (localStorage.getItem(STORAGE_KEY) as Theme | null) ??
+        (localStorage.getItem(LEGACY_STORAGE_KEY) as Theme | null) ??
+        "system"
+      );
     } catch {
       // Storage can be unavailable (private mode, blocked cookies) —
       // "system" is a perfectly good fallback.

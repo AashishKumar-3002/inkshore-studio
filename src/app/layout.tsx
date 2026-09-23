@@ -7,15 +7,15 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Inkdrop Studio",
-    template: "%s · Inkdrop Studio",
+    default: "Inkshore Studio",
+    template: "%s · Inkshore Studio",
   },
   description:
     "Build your story bible, draft chapters with AI that knows your book, and export a finished manuscript.",
-  applicationName: "Inkdrop Studio",
-  icons: { icon: "/logo.png", apple: "/logo.png" },
+  applicationName: "Inkshore Studio",
+  icons: { icon: "/logo.svg", apple: "/logo.png" },
   openGraph: {
-    title: "Inkdrop Studio",
+    title: "Inkshore Studio",
     description:
       "Build your story bible, draft chapters with AI that knows your book, and export a finished manuscript.",
     type: "website",

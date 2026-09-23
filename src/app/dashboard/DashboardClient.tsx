@@ -102,7 +102,7 @@ export function DashboardClient() {
       router.push(projectHref(project));
     } catch (e) {
       toast.error(
-        e instanceof Error ? e.message : "Couldn't read that file as an Inkdrop project."
+        e instanceof Error ? e.message : "Couldn't read that file as an Inkshore project."
       );
       setImporting(false);
     } finally {
@@ -189,7 +189,7 @@ export function DashboardClient() {
           <EmptyState
             icon={<BookText className="h-4 w-4" />}
             title="No projects yet"
-            description="Start one and Inkdrop walks you through a short questionnaire that becomes the story bible every chapter is written against."
+            description="Start one and Inkshore walks you through a short questionnaire that becomes the story bible every chapter is written against."
             action={
               <>
                 <Button onClick={createProject} loading={creating}>

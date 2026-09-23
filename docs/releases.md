@@ -22,7 +22,7 @@ To release, update the versions in both `package.json` and
 commit. For example, after updating both packages and lockfiles to `0.1.1`:
 
 ```bash
-git tag -a v0.1.1 -m "Inkdrop Studio v0.1.1 — Preview"
+git tag -a v0.1.1 -m "Inkshore Studio v0.1.1 — Preview"
 git push origin v0.1.1
 ```
 
@@ -47,10 +47,11 @@ certificates are available. Auto-update is not implemented.
 
 ### Desktop branding
 
-The app and installers display **Inkdrop Studio**, with a branded inkdrop icon,
+The app and installers display **Inkshore Studio**, with a branded tide icon,
 About/version information, documentation and issue links, and Windows Start Menu
 and desktop shortcuts. Linux packages include desktop-menu metadata. The existing
-`inkdrop-studio-desktop` library folder is retained when branding the visible app.
+legacy `inkdrop-studio-desktop` library folder is retained so existing local
+projects remain available after the rebrand.
 
 Platform icon assets live in `desktop/build/icons/`. To regenerate the ICNS, ICO,
 and Linux PNG sizes from `icon.png` after updating the artwork:
@@ -63,4 +64,4 @@ node scripts/build-desktop-icons.mjs
 The exporter uses electron-builder's icon toolset and may download it on first
 run. Commit the exported assets so CI does not need to generate artwork. Download
 names include the version, OS, and architecture, for example
-`Inkdrop-Studio-0.1.0-mac-arm64.dmg`.
+`Inkshore-Studio-0.1.0-mac-arm64.dmg`.

@@ -54,8 +54,8 @@ const questions = [
     "The chapter assistant prepares changes for you to review before applying them. You can apply a revision and return to saved originals. Finished chapters can also be locked to protect them from edits and regeneration.",
   ],
   [
-    "Is Inkdrop free?",
-    "Inkdrop Studio is MIT-licensed, and the current desktop preview does not charge for the app. API calls are billed by your provider; subscription generation uses your existing plan’s allowance. Hosted credits and subscriptions are planned separately.",
+    "Is Inkshore free?",
+    "Inkshore Studio is MIT-licensed, and the current desktop preview does not charge for the app. API calls are billed by your provider; subscription generation uses your existing plan’s allowance. Hosted credits and subscriptions are planned separately.",
   ],
   [
     "Can I use it on my phone or sync devices?",
@@ -112,9 +112,9 @@ export default function LandingSite({
     <div className={styles.site}>
       <header className={styles.wrap}>
         <nav className={styles.nav} aria-label="Main navigation">
-          <a href="#" className={styles.brand} aria-label="Inkdrop Studio home">
-            <Image src="/logo.png" width={27} height={34} alt="" />
-            Inkdrop Studio
+          <a href="#" className={styles.brand} aria-label="Inkshore Studio home">
+            <Image src="/logo.svg" width={30} height={30} alt="" />
+            Inkshore Studio
           </a>
           <button
             className={styles.menuButton}
@@ -143,7 +143,7 @@ export default function LandingSite({
               GitHub <ArrowUpRight size={12} className="inline" />
             </a>
             <a href="#download" onClick={closeMenu} className={styles.navCta}>
-              Get Inkdrop <ArrowDownToLine size={15} />
+              Get Inkshore <ArrowDownToLine size={15} />
             </a>
           </div>
         </nav>
@@ -170,7 +170,7 @@ export default function LandingSite({
             </p>
             <div className={styles.actions}>
               <a className={styles.primary} href="#download">
-                Get Inkdrop Studio <ArrowDownToLine size={18} />
+                Get Inkshore Studio <ArrowDownToLine size={18} />
               </a>
               <a className={styles.secondary} href="#workspace">
                 Take a look inside <ArrowDown size={17} />
@@ -206,9 +206,9 @@ export default function LandingSite({
                     ? "/screenshots/chapter-assistant-light.png"
                     : "/screenshots/chapter-assistant.png"
                 }
-                alt={`Inkdrop Studio's chapter editor and revision assistant in ${light ? "light" : "dark"} mode, with a sample story called The Last Lighthouse`}
-                width={1280}
-                height={960}
+                alt={`Inkshore Studio's chapter editor and revision assistant in ${light ? "light" : "dark"} mode, with a sample story called The Last Lighthouse`}
+                width={1600}
+                height={1100}
                 sizes="(max-width: 1240px) 94vw, 1168px"
                 loading="eager"
               />
@@ -561,7 +561,7 @@ export default function LandingSite({
               you are.
             </p>
             <a href="#download" className={styles.primary}>
-              Find your Inkdrop <ArrowRight size={18} />
+              Start with Inkshore <ArrowRight size={18} />
             </a>
           </section>
         </div>
@@ -569,8 +569,8 @@ export default function LandingSite({
       <footer className={`${styles.wrap} ${styles.footer}`}>
         <div className={styles.footerTop}>
           <a href="#" className={styles.brand}>
-            <Image src="/logo.png" alt="" width={27} height={34} />
-            Inkdrop Studio
+            <Image src="/logo.svg" alt="" width={30} height={30} />
+            Inkshore Studio
           </a>
           <div className={styles.footerLinks}>
             <a href={REPO}>Source code</a>

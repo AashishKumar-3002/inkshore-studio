@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Inkdrop Studio — design system.
+ * Inkshore Studio — design system.
  *
  * Modern, minimal, dense. Near-neutral greys, a single indigo accent used
  * sparingly, soft 1px borders and low-contrast shadows for depth. Content
@@ -405,7 +405,7 @@
     border-radius: var(--radius-lg);
   }
 
-  @keyframes inkdrop-fade-in {
+  @keyframes inkshore-fade-in {
     from {
       opacity: 0;
       transform: translateY(4px);
@@ -416,10 +416,10 @@
     }
   }
   .animate-fade-in {
-    animation: inkdrop-fade-in 0.18s cubic-bezier(0.2, 0, 0, 1);
+    animation: inkshore-fade-in 0.18s cubic-bezier(0.2, 0, 0, 1);
   }
 
-  @keyframes inkdrop-shimmer {
+  @keyframes inkshore-shimmer {
     100% {
       transform: translateX(100%);
     }
@@ -441,10 +441,10 @@
       color-mix(in srgb, var(--surface-3) 80%, transparent),
       transparent
     );
-    animation: inkdrop-shimmer 1.5s infinite;
+    animation: inkshore-shimmer 1.5s infinite;
   }
 
-  @keyframes inkdrop-blink {
+  @keyframes inkshore-blink {
     50% {
       opacity: 0;
     }
@@ -457,7 +457,7 @@
     vertical-align: -0.16em;
     margin-left: 2px;
     border-radius: 1px;
-    animation: inkdrop-blink 1.05s step-end infinite;
+    animation: inkshore-blink 1.05s step-end infinite;
   }
 
   @supports (scrollbar-color: auto) {

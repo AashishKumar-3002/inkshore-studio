@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="public/logo.png" alt="Inkdrop Studio" width="80" />
+  <img src="public/logo.svg" alt="Inkshore Studio" width="80" />
 </p>
 
-<h1 align="center">Inkdrop Studio</h1>
+<h1 align="center">Inkshore Studio</h1>
 
 <h3 align="center">Your story. Your voice. A little help with the next draft.</h3>
 
@@ -13,15 +13,15 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AashishKumar-3002/inkdrop-studio/releases"><strong>Download Inkdrop Studio</strong></a> ·
+  <a href="https://github.com/AashishKumar-3002/inkdrop-studio/releases"><strong>Download Inkshore Studio</strong></a> ·
   <a href="#start-writing">Start writing</a> ·
   <a href="https://github.com/AashishKumar-3002/inkdrop-studio/issues">Share feedback</a>
 </p>
 
-![Inkdrop Studio chapter editor with a sample manuscript and the chapter assistant open for revision](docs/images/chapter-assistant.png)
+![Inkshore Studio chapter editor with a sample manuscript and the chapter assistant open for revision](docs/images/chapter-assistant.png)
 
 A paragraph feels flat. A conversation needs tension. You're not sure whether
-that opening chapter works. Inkdrop gives you a place to work through it:
+that opening chapter works. Inkshore gives you a place to work through it:
 select a passage and ask for help, get an evidence-backed chapter critique,
 or prepare a rewrite that you review before it touches your draft.
 
@@ -59,7 +59,7 @@ saved originals to return to.
 
 Switch between light, dark, and your system theme.
 
-![Inkdrop Studio in light mode, showing the chapter editor and revision assistant](docs/images/chapter-assistant-light.png)
+![Inkshore Studio in light mode, showing the chapter editor and revision assistant](docs/images/chapter-assistant-light.png)
 
 ## Desktop
 
@@ -99,7 +99,7 @@ does not mean that text sent for AI processing stays on your device.
 
 ## Start writing
 
-1. Open Inkdrop Studio and create a project. You can rename it by double-clicking
+1. Open Inkshore Studio and create a project. You can rename it by double-clicking
    its name in the header.
 2. Fill in your story bible, or import the notes you already have.
 3. Add a chapter by writing, pasting, or uploading an existing draft.

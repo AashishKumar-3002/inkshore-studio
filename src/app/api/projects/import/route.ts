@@ -8,9 +8,9 @@ export const runtime = "nodejs";
 export const maxDuration = 120;
 
 /**
- * Imports a project from an exported `.inkdrop.json` file. Always creates a
- * new project owned by the importer — it never overwrites an existing one,
- * and never adopts credentials from the file.
+ * Imports a project from an `.inkshore.json` file. The payload remains
+ * compatible with pre-rebrand `.inkdrop.json` exports. Import always creates
+ * a new project and never adopts credentials from the file.
  */
 export async function POST(req: NextRequest) {
   return handle(async () => {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const body = await parseBody(req, importProjectSchema);
 
     if (!body.storyBible || typeof body.storyBible !== "object") {
-      throw new ApiProblem(400, "This doesn't look like an Inkdrop project export.");
+      throw new ApiProblem(400, "This doesn't look like an Inkshore project export.");
     }
 
     const project = await importProject(

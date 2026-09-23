@@ -95,7 +95,9 @@ export default function ChaptersPage() {
   useEffect(() => {
     let saved: string | null = null;
     try {
-      saved = localStorage.getItem("inkdrop:chaptersView");
+      saved =
+        localStorage.getItem("inkshore:chaptersView") ??
+        localStorage.getItem("inkdrop:chaptersView");
     } catch {
       // per-viewer convenience only — ignore if storage is unavailable
     }
@@ -112,7 +114,7 @@ export default function ChaptersPage() {
   function setViewMode(v: ViewMode) {
     setView(v);
     try {
-      localStorage.setItem("inkdrop:chaptersView", v);
+      localStorage.setItem("inkshore:chaptersView", v);
     } catch {
       // ignore — per-viewer convenience only
     }
@@ -383,7 +385,7 @@ export default function ChaptersPage() {
           className="mt-6"
           icon={<FileText className="h-4 w-4" />}
           kicker="No chapters yet"
-          title="Give it one rough idea. Inkdrop writes the chapter."
+          title="Give it one rough idea. Inkshore writes the chapter."
           description={
             <>
               Add a chapter with nothing but a sentence of intent, and it arrives drafted

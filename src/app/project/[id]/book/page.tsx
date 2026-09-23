@@ -234,7 +234,7 @@ export default function BookPage() {
                 <Textarea
                   id="cover-vision"
                   rows={2}
-                  placeholder="e.g. moody, a single figure walking away from a burning house, cold blues... or leave blank and let Inkdrop suggest directions from your story."
+                  placeholder="e.g. moody, a single figure walking away from a burning house, cold blues... or leave blank and let Inkshore suggest directions from your story."
                   value={vision}
                   onChange={(e) => setVision(e.target.value)}
                 />
