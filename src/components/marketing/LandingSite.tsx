@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useState } from "react";
 import {
-  ArrowDown,
   ArrowDownToLine,
   ArrowRight,
   ArrowUpRight,
@@ -142,8 +141,11 @@ export default function LandingSite({
             <a href={REPO} target="_blank" rel="noreferrer">
               GitHub <ArrowUpRight size={12} className="inline" />
             </a>
+            <a href="/register" onClick={closeMenu} className={styles.navCta}>
+              Try on web <ArrowRight size={15} />
+            </a>
             <a href="#download" onClick={closeMenu} className={styles.navCta}>
-              Get Inkshore <ArrowDownToLine size={15} />
+              Download <ArrowDownToLine size={15} />
             </a>
           </div>
         </nav>
@@ -169,16 +171,16 @@ export default function LandingSite({
               when you want it—and the final say, always yours.
             </p>
             <div className={styles.actions}>
-              <a className={styles.primary} href="#download">
-                Get Inkshore Studio <ArrowDownToLine size={18} />
+              <a className={styles.primary} href="/register">
+                Try on web <ArrowRight size={18} />
               </a>
-              <a className={styles.secondary} href="#workspace">
-                Take a look inside <ArrowDown size={17} />
+              <a className={styles.secondary} href="#download">
+                Download desktop <ArrowDownToLine size={17} />
               </a>
             </div>
             <p className={styles.small}>
-              Local-first <span>·</span> No account to start <span>·</span> Open
-              source
+              Try in your browser <span>·</span> Local-first desktop <span>·</span>{" "}
+              Open source
             </p>
           </div>
           <div className={styles.previewArea} id="workspace">
@@ -560,8 +562,8 @@ export default function LandingSite({
               Bring your notes. Bring your half-finished chapter. Start where
               you are.
             </p>
-            <a href="#download" className={styles.primary}>
-              Start with Inkshore <ArrowRight size={18} />
+            <a href="/register" className={styles.primary}>
+              Try Inkshore on the web <ArrowRight size={18} />
             </a>
           </section>
         </div>
@@ -575,7 +577,7 @@ export default function LandingSite({
           <div className={styles.footerLinks}>
             <a href={REPO}>Source code</a>
             <a href={`${REPO}/issues`}>Feedback & issues</a>
-            <a href="/login">Web app</a>
+            <a href="/register">Try on web</a>
             <a href={`${REPO}/blob/feat/desktop-releases/LICENSE`}>
               MIT License
             </a>
