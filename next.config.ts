@@ -1,10 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Emits .next/standalone — a self-contained server with only the modules
-  // it actually uses, which is what the Docker image runs. Vercel ignores
-  // this and uses its own bundling, so it's safe to leave on everywhere.
-  output: "standalone",
+  // Standalone output powers the desktop/Docker bundle. Vercel performs its
+  // own tracing and currently fails when standalone is enabled there.
+  output: process.env.VERCEL ? undefined : "standalone",
 
   // The cover image arrives as a base64 data URL and is written straight
   // into the page and the EPUB, so the optimizer has nothing to do with it.
