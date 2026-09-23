@@ -9,14 +9,14 @@ export const metadata: Metadata = {
   description:
     "A local-first writing studio for your world, chapters, and voice. Revise with AI, review every change, and export your manuscript. No account needed on desktop.",
   openGraph: {
-    title: "Inkdrop Studio — Your next draft starts here",
+    title: "Inkshore Studio — Your next draft starts here",
     description: "Your story. Your voice. A little help with the next draft.",
     images: [
       {
         url: "/screenshots/chapter-assistant-light.png",
         width: 1280,
         height: 960,
-        alt: "Inkdrop Studio chapter editor and assistant",
+        alt: "Inkshore Studio chapter editor and assistant",
       },
     ],
   },

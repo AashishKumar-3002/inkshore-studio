@@ -375,7 +375,7 @@ export default function SettingsPage() {
               continuity on chapters outside the full-text window
             </label>
             <p className="text-xs text-ink-subtle">
-              After each successful generation, Inkdrop asks the model for a short
+              After each successful generation, Inkshore asks the model for a short
               continuity note (characters, what changed) and appends it here. It never
               shows up in your chapters — it&rsquo;s only used as background context
               for ideation.
@@ -469,8 +469,8 @@ export default function SettingsPage() {
             <div className="min-w-0">
               <Lbl className="mb-1 block">Export project file</Lbl>
               <p className="text-[13px] text-ink-muted">
-                Portable <span className="mono">.inkdrop.json</span> — bible, chapters
-                and board. API keys are not included.
+                Portable <span className="mono">.inkshore.json</span> — bible, chapters
+                and board. Older Inkdrop exports remain importable. API keys are not included.
               </p>
             </div>
             <a href={`/api/projects/${id}/export`}>

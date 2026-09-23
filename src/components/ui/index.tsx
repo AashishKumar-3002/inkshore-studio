@@ -1,5 +1,5 @@
 /**
- * Inkdrop Studio's UI kit.
+ * Inkshore Studio's UI kit.
  *
  * Minimal and dense: quiet 1px borders, soft shadows for depth, 8–12px
  * radii, and a near-black primary action so the indigo accent stays rare

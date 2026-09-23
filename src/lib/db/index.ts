@@ -17,7 +17,7 @@ import * as schema from "./schema";
  * over DATABASE_URL exactly as before.
  */
 export function localDbDir(): string | undefined {
-  return process.env.INKDROP_DB_DIR || undefined;
+  return process.env.INKSHORE_DB_DIR || process.env.INKDROP_DB_DIR || undefined;
 }
 
 export function isLocalDb(): boolean {
@@ -47,6 +47,10 @@ function createPool(): Pool {
  * leak: a second handle on the same directory is a locking error.
  */
 const globalForDb = globalThis as unknown as {
+  __inkshorePool?: Pool;
+  __inkshoreDb?: NodePgDatabase<typeof schema>;
+  // Read the pre-rebrand globals during hot reload so a running dev process
+  // does not open a second connection when this module is replaced.
   __inkdropPool?: Pool;
   __inkdropDb?: NodePgDatabase<typeof schema>;
 };
@@ -60,8 +64,8 @@ export function getPool(): Pool {
   if (isLocalDb()) {
     throw new Error("This install uses a local database; there is no connection pool.");
   }
-  if (!globalForDb.__inkdropPool) globalForDb.__inkdropPool = createPool();
-  return globalForDb.__inkdropPool;
+  globalForDb.__inkshorePool ??= globalForDb.__inkdropPool ?? createPool();
+  return globalForDb.__inkshorePool;
 }
 
 function build(): NodePgDatabase<typeof schema> {
@@ -98,6 +102,8 @@ function build(): NodePgDatabase<typeof schema> {
  * that the desktop shell sets before this process starts.
  */
 export const db: NodePgDatabase<typeof schema> =
-  globalForDb.__inkdropDb ?? (globalForDb.__inkdropDb = build());
+  globalForDb.__inkshoreDb ??
+  globalForDb.__inkdropDb ??
+  (globalForDb.__inkshoreDb = build());
 
 export { schema };

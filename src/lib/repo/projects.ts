@@ -355,7 +355,8 @@ export async function deleteProject(id: string, userId: string): Promise<boolean
 }
 
 /**
- * Imports a `.inkdrop.json` export as a brand-new project owned by the
+ * Imports an `.inkshore.json` export, including the legacy `.inkdrop.json`
+ * format, as a brand-new project owned by the
  * importer. API keys in the file are discarded rather than trusted — an
  * export shared between people must never carry credentials across.
  */

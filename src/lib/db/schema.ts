@@ -1,5 +1,5 @@
 /**
- * Inkdrop Studio — database schema (Drizzle / PostgreSQL).
+ * Inkshore Studio — database schema (Drizzle / PostgreSQL).
  *
  * Design note: chapters live in their own table because they grow
  * unboundedly and need ordering, per-row updates and pagination. The

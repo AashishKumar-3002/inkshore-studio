@@ -13,12 +13,13 @@ const request = () => ({ apiKey: "subscription", model: "default", systemPrompt:
 
 describe("Codex generation", () => {
   it("rejects hosted execution before loading a runtime", async () => {
+    vi.stubEnv("INKSHORE_DESKTOP", "");
     vi.stubEnv("INKDROP_DESKTOP", "");
     await expect(codexSubscriptionProvider.generateChapter(request())).rejects.toThrow("desktop");
     expect(mocks.options).not.toHaveBeenCalled();
   });
   it("uses subscription authentication and emits completed snapshots once", async () => {
-    vi.stubEnv("INKDROP_DESKTOP", "1");
+    vi.stubEnv("INKSHORE_DESKTOP", "1");
     vi.stubEnv("OPENAI_API_KEY", "must-not-use");
     mocks.run.mockResolvedValue({ events: (async function* () {
       yield { type: "item.updated", item: { type: "agent_message", text: "Morning" } };
@@ -35,7 +36,7 @@ describe("Codex generation", () => {
     expect(mocks.start.mock.calls[0][0].sandboxMode).toBe("read-only");
   });
   it("uses a native report schema without wrapping it in a text property", async () => {
-    vi.stubEnv("INKDROP_DESKTOP", "1");
+    vi.stubEnv("INKSHORE_DESKTOP", "1");
     const outputSchema = { type: "object", properties: { assessment: { type: "string" } }, required: ["assessment"], additionalProperties: false };
     const response = JSON.stringify({ assessment: "A quiet chapter" });
     mocks.run.mockResolvedValue({ events: (async function* () {
@@ -46,7 +47,7 @@ describe("Codex generation", () => {
     expect(mocks.run.mock.calls[0][1].outputSchema).toEqual(outputSchema);
   });
   it("rejects a failed turn instead of returning partial text", async () => {
-    vi.stubEnv("INKDROP_DESKTOP", "1");
+    vi.stubEnv("INKSHORE_DESKTOP", "1");
     mocks.run.mockResolvedValue({ events: (async function* () {
       yield { type: "item.completed", item: { type: "agent_message", text: "I will write the chapter." } };
       yield { type: "turn.failed", error: { message: "Usage limit reached" } };
@@ -56,7 +57,7 @@ describe("Codex generation", () => {
     expect(req.onChunk).not.toHaveBeenCalled();
   });
   it("does not start a cancelled request", async () => {
-    vi.stubEnv("INKDROP_DESKTOP", "1");
+    vi.stubEnv("INKSHORE_DESKTOP", "1");
     await expect(codexSubscriptionProvider.generateChapter({ ...request(), signal: AbortSignal.abort() })).rejects.toThrow();
     expect(mocks.run).not.toHaveBeenCalled();
   });

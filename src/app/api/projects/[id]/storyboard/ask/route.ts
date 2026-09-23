@@ -19,7 +19,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     if (!apiKey && ["claude-subscription", "codex-subscription"].includes(project.aiSettings.provider)) {
       throw new ApiProblem(
         400,
-        "Subscription mode only works in the Inkdrop desktop app using your local Claude or Codex sign-in. Pick a provider with an API key instead."
+        "Subscription mode only works in the Inkshore desktop app using your local Claude or Codex sign-in. Pick a provider with an API key instead."
       );
     }
     if (!apiKey) {

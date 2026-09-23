@@ -1,4 +1,4 @@
-// Core data model for the Inkdrop Studio app.
+// Core data model for the Inkshore Studio app.
 
 export type AnswerValue = {
   /** Selected option ids (chips). Empty array if user only wrote custom text. */

@@ -192,7 +192,7 @@ export const coverGenerateSchema = z.object({
 /* Import                                                            */
 /* ---------------------------------------------------------------- */
 
-const NOT_AN_EXPORT = "This doesn't look like an Inkdrop project export.";
+const NOT_AN_EXPORT = "This doesn't look like an Inkshore project export.";
 
 export const importProjectSchema = z
   .object({

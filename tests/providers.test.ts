@@ -14,16 +14,17 @@ beforeEach(() => {
   process.env.ENCRYPTION_KEY = "c".repeat(64);
   for (const id of AI_PROVIDER_IDS) delete process.env[envVarFor(id)];
   // Every test starts as the web build; the desktop-only cases opt in.
+  delete process.env.INKSHORE_DESKTOP;
   delete process.env.INKDROP_DESKTOP;
 });
 
-/** Runs `fn` as if inside the Electron shell, which sets INKDROP_DESKTOP=1. */
+/** Runs `fn` as if inside the Electron shell, which sets INKSHORE_DESKTOP=1. */
 function onDesktop<T>(fn: () => T): T {
-  process.env.INKDROP_DESKTOP = "1";
+  process.env.INKSHORE_DESKTOP = "1";
   try {
     return fn();
   } finally {
-    delete process.env.INKDROP_DESKTOP;
+    delete process.env.INKSHORE_DESKTOP;
   }
 }
 

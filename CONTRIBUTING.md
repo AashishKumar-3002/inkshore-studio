@@ -1,6 +1,6 @@
 # Contributing
 
-Inkdrop Studio is built for writers. The most useful contribution is often a
+Inkshore Studio is built for writers. The most useful contribution is often a
 clear description of something that made writing harder.
 
 ## Issues and feedback

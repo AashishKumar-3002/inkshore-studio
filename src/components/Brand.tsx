@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 export function Logo({ size = 20, className }: { size?: number; className?: string }) {
   return (
     <Image
-      src="/logo.png"
+      src="/logo.svg"
       alt=""
       width={size}
       height={size}
@@ -35,7 +35,7 @@ export function Wordmark({
       style={{ fontSize: size }}
     >
       <Logo size={Math.round(size * 1.25)} />
-      {short ? "Inkdrop" : "Inkdrop Studio"}
+      {short ? "Inkshore" : "Inkshore Studio"}
     </span>
   );
   return href ? (

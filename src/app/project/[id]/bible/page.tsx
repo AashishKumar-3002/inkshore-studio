@@ -212,7 +212,7 @@ export default function BiblePage() {
       {showImport && (
         <Card className="mt-6 p-5">
           <p className="text-xs text-ink-muted">
-            Paste your notes, or upload a story-bible.md / text file — Inkdrop will map
+            Paste your notes, or upload a story-bible.md / text file — Inkshore will map
             what it can onto the questionnaire below.
           </p>
           <Textarea

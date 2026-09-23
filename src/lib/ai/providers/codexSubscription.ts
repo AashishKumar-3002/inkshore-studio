@@ -14,7 +14,7 @@ export const codexSubscriptionProvider: AIProvider = {
 
   async generateChapter({ model, systemPrompt, userPrompt, imageDataUrl, signal, onChunk, outputSchema }) {
     if (!isDesktopRuntime()) {
-      throw new Error("Codex subscription mode is only available in the Inkdrop desktop app.");
+      throw new Error("Codex subscription mode is only available in the Inkshore desktop app.");
     }
     signal?.throwIfAborted();
     if (imageDataUrl) {
@@ -25,7 +25,7 @@ export const codexSubscriptionProvider: AIProvider = {
       Object.entries(process.env).filter(([key, value]) => value !== undefined &&
         !["OPENAI_API_KEY", "CODEX_API_KEY", "OPENAI_BASE_URL", "CODEX_ACCESS_TOKEN"].includes(key))
     ) as Record<string, string>;
-    const directory = await mkdtemp(path.join(tmpdir(), "inkdrop-codex-"));
+    const directory = await mkdtemp(path.join(tmpdir(), "inkshore-codex-"));
     try {
       const codex = new Codex({
         env,

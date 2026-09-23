@@ -16,8 +16,10 @@ export const openrouterProvider = createOpenAICompatibleProvider({
   docsUrl: "https://openrouter.ai/keys",
   keyHint: "Starts with sk-or-",
   defaultHeaders: {
-    "HTTP-Referer": process.env.OPENROUTER_SITE_URL || "https://inkdrop.studio",
-    "X-Title": process.env.OPENROUTER_SITE_NAME || "Inkdrop Studio",
+    "HTTP-Referer":
+      process.env.OPENROUTER_SITE_URL ||
+      "https://github.com/AashishKumar-3002/inkdrop-studio",
+    "X-Title": process.env.OPENROUTER_SITE_NAME || "Inkshore Studio",
   },
   models: [
     { id: "anthropic/claude-sonnet-4.5", label: "Claude Sonnet 4.5", vision: true },

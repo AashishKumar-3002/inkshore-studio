@@ -9,7 +9,7 @@ import { once } from "node:events";
 
 const require = createRequire(import.meta.url);
 const { startServer } = require("../desktop/src/server.js");
-const dataDir = await mkdtemp(path.join(tmpdir(), "inkdrop-desktop-smoke-"));
+const dataDir = await mkdtemp(path.join(tmpdir(), "inkshore-desktop-smoke-"));
 let child;
 try {
   const started = await startServer({

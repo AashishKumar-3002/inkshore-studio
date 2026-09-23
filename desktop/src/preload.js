@@ -8,9 +8,14 @@ const { contextBridge, ipcRenderer } = require("electron");
  * nothing from Electron. `isDesktop` lets the UI show desktop-only affordances
  * such as Claude subscription mode.
  */
-contextBridge.exposeInMainWorld("inkdrop", {
+const bridge = {
   isDesktop: true,
   platform: process.platform,
-  getConfig: () => ipcRenderer.invoke("inkdrop:getConfig"),
-  setDatabaseUrl: (url) => ipcRenderer.invoke("inkdrop:setDatabaseUrl", url),
-});
+  getConfig: () => ipcRenderer.invoke("inkshore:getConfig"),
+  setDatabaseUrl: (url) => ipcRenderer.invoke("inkshore:setDatabaseUrl", url),
+};
+
+contextBridge.exposeInMainWorld("inkshore", bridge);
+// Keep the old bridge for installed clients whose cached web bundle still
+// expects it during an in-place upgrade.
+contextBridge.exposeInMainWorld("inkdrop", bridge);

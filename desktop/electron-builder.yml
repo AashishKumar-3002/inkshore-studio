@@ -1,8 +1,8 @@
-appId: studio.inkdrop.desktop
-productName: Inkdrop Studio
+appId: studio.inkshore.desktop
+productName: Inkshore Studio
 copyright: Copyright © 2026 Aashish Kumar
 # Include OS and architecture so release uploads never overwrite another build.
-artifactName: Inkdrop-Studio-${version}-${os}-${arch}.${ext}
+artifactName: Inkshore-Studio-${version}-${os}-${arch}.${ext}
 
 directories:
   output: dist
@@ -45,15 +45,15 @@ win:
 
 linux:
   icon: build/icons/png
-  executableName: inkdrop-studio
+  executableName: inkshore-studio
   category: Office
   synopsis: Local-first fiction writing and AI editing
   desktop:
     entry:
-      Name: Inkdrop Studio
+      Name: Inkshore Studio
       Comment: Write, organize, and revise your stories
       Keywords: writing;fiction;novel;editor;
-      StartupWMClass: Inkdrop Studio
+      StartupWMClass: Inkshore Studio
   target:
     - AppImage
     - deb
@@ -61,14 +61,14 @@ linux:
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
-  shortcutName: Inkdrop Studio
+  shortcutName: Inkshore Studio
   createDesktopShortcut: always
   createStartMenuShortcut: true
   installerIcon: build/icons/icon.ico
   uninstallerIcon: build/icons/icon.ico
 
 dmg:
-  title: Inkdrop Studio ${version}
+  title: Inkshore Studio ${version}
   icon: build/icons/icon.icns
 
 deb:
