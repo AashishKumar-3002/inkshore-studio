@@ -19,6 +19,14 @@ files:
 extraResources:
   - from: ../.next/standalone
     to: server
+  # electron-builder does not include standalone node_modules automatically.
+  # These are required before Next starts, so keep them explicit resources.
+  - from: ../.next/standalone/node_modules/drizzle-orm
+    to: server/node_modules/drizzle-orm
+  - from: ../.next/standalone/node_modules/fractional-indexing
+    to: server/node_modules/fractional-indexing
+  - from: ../.next/standalone/node_modules/@electric-sql/pglite
+    to: server/node_modules/@electric-sql/pglite
   - from: ../.next/static
     to: server/.next/static
   - from: ../public

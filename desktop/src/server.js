@@ -60,7 +60,7 @@ async function waitForServer(url, { timeoutMs = 30000, signal } = {}) {
  * reproduce on someone else's machine.
  */
 function migrateLocalDb({ root, dataDir, onLog }) {
-  const runner = path.join(root, "migrate-local.mjs");
+  const runner = path.join(root, "migrate.mjs");
   const migrations = path.join(root, "drizzle");
   if (!fs.existsSync(runner) || !fs.existsSync(migrations)) {
     throw new Error(
