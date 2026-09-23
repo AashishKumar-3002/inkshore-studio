@@ -57,6 +57,17 @@ for (const [from, to] of [
 // PGlite carries a WASM payload that Next's tracer resolves inconsistently,
 // and the Agent SDK is an optional dependency it may skip entirely. Both
 // have to be present at runtime, so copy them in rather than hope.
+for (const name of ["drizzle-orm", "fractional-indexing"]) {
+  const source = path.join(root, "node_modules", name);
+  const target = path.join(standalone, "node_modules", name);
+  if (!(await exists(source))) {
+    throw new Error(`Missing ${name}; install desktop runtime dependencies.`);
+  }
+  await rm(target, { recursive: true, force: true });
+  await cp(source, target, { recursive: true });
+  console.log(`copied ${name} into the standalone bundle`);
+}
+
 const pglite = path.join(root, "node_modules", "@electric-sql", "pglite");
 const pgliteDest = path.join(standalone, "node_modules", "@electric-sql", "pglite");
 if ((await exists(pglite)) && !(await exists(pgliteDest))) {

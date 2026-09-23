@@ -19,6 +19,23 @@ files:
 extraResources:
   - from: ../.next/standalone
     to: server
+  # electron-builder omits node_modules while copying the standalone tree.
+  # These packages are imported dynamically by the desktop boot/migration
+  # path, so keep them as explicit resources in the installed app.
+  - from: ../.next/standalone/node_modules/drizzle-orm
+    to: server/node_modules/drizzle-orm
+  - from: ../.next/standalone/node_modules/fractional-indexing
+    to: server/node_modules/fractional-indexing
+  - from: ../.next/standalone/node_modules/@electric-sql/pglite
+    to: server/node_modules/@electric-sql/pglite
+  - from: ../.next/standalone/node_modules/@anthropic-ai/claude-agent-sdk
+    to: server/node_modules/@anthropic-ai/claude-agent-sdk
+  - from: ../.next/standalone/node_modules/@openai/codex-sdk
+    to: server/node_modules/@openai/codex-sdk
+  - from: ../.next/standalone/node_modules/@openai/codex
+    to: server/node_modules/@openai/codex
+  - from: ../.next/standalone/node_modules/@openai/codex-darwin-arm64
+    to: server/node_modules/@openai/codex-darwin-arm64
   - from: ../.next/static
     to: server/.next/static
   - from: ../public
