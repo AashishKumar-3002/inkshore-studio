@@ -18,7 +18,7 @@ export const openrouterProvider = createOpenAICompatibleProvider({
   defaultHeaders: {
     "HTTP-Referer":
       process.env.OPENROUTER_SITE_URL ||
-      "https://github.com/AashishKumar-3002/inkdrop-studio",
+      "https://github.com/AashishKumar-3002/inkshore-studio",
     "X-Title": process.env.OPENROUTER_SITE_NAME || "Inkshore Studio",
   },
   models: [

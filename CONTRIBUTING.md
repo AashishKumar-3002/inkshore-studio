@@ -6,7 +6,7 @@ clear description of something that made writing harder.
 ## Issues and feedback
 
 Bug reports, UX feedback, and feature suggestions are welcome through
-[GitHub Issues](https://github.com/AashishKumar-3002/inkdrop-studio/issues).
+[GitHub Issues](https://github.com/AashishKumar-3002/inkshore-studio/issues).
 You do not need to propose a fix or submit code.
 
 For bugs, include your OS, app version, steps to reproduce, and what you expected.

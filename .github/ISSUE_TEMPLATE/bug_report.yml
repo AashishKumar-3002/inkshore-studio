@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible problem in Inktide Studio.
+description: Report a reproducible problem in Inkshore Studio.
 title: "[Bug]: "
 body:
   - type: markdown

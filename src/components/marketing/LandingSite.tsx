@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import styles from "./landing.module.css";
 
-const REPO = "https://github.com/AashishKumar-3002/inkdrop-studio";
+const REPO = "https://github.com/AashishKumar-3002/inkshore-studio";
 export type DesktopDownloads = {
   version?: string;
   macArm?: string;

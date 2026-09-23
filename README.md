@@ -13,9 +13,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AashishKumar-3002/inkdrop-studio/releases"><strong>Download Inkshore Studio</strong></a> ·
+  <a href="https://github.com/AashishKumar-3002/inkshore-studio/releases"><strong>Download Inkshore Studio</strong></a> ·
   <a href="#start-writing">Start writing</a> ·
-  <a href="https://github.com/AashishKumar-3002/inkdrop-studio/issues">Share feedback</a>
+  <a href="https://github.com/AashishKumar-3002/inkshore-studio/issues">Share feedback</a>
 </p>
 
 ![Inkshore Studio chapter editor with a sample manuscript and the chapter assistant open for revision](docs/images/chapter-assistant.png)
@@ -63,7 +63,7 @@ Switch between light, dark, and your system theme.
 
 ## Desktop
 
-Find published installers on the [Releases page](https://github.com/AashishKumar-3002/inkdrop-studio/releases).
+Find published installers on the [Releases page](https://github.com/AashishKumar-3002/inkshore-studio/releases).
 
 | Platform | Architecture | Installer |
 | --- | --- | --- |
@@ -114,7 +114,7 @@ optional; it is required only for generation, analysis, and other AI actions.
 ## Feedback and issues
 
 Found a bug, confusing interaction, or something missing from your writing
-workflow? [Open an issue](https://github.com/AashishKumar-3002/inkdrop-studio/issues).
+workflow? [Open an issue](https://github.com/AashishKumar-3002/inkshore-studio/issues).
 Include your app version and operating system; steps or screenshots help with
 bugs. Please leave out private manuscript text, API keys, and account details.
 
@@ -123,8 +123,8 @@ bugs. Please leave out private manuscript text, API keys, and account details.
 Use **Node.js 22** and npm. CI uses Node.js 22 as well.
 
 ```bash
-git clone https://github.com/AashishKumar-3002/inkdrop-studio.git
-cd inkdrop-studio
+git clone https://github.com/AashishKumar-3002/inkshore-studio.git
+cd inkshore-studio
 npm ci
 npm ci --prefix desktop
 ```
