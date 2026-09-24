@@ -79,6 +79,24 @@ if ((await exists(sdk)) && !(await exists(sdkDest))) {
   console.log("copied @anthropic-ai/claude-agent-sdk into the standalone bundle");
 }
 
+// The Agent SDK resolves Claude Code from a platform-specific optional
+// package at runtime. Next cannot trace that package because the lookup is
+// dynamic, so copy the native binary explicitly with the SDK.
+const claudeNativeName = `claude-agent-sdk-${process.platform}-${process.arch}`;
+const claudeNative = path.join(root, "node_modules", "@anthropic-ai", claudeNativeName);
+const claudeNativeDest = path.join(
+  standalone,
+  "node_modules",
+  "@anthropic-ai",
+  claudeNativeName
+);
+if (!(await exists(claudeNative))) {
+  throw new Error(`Missing @anthropic-ai/${claudeNativeName}; install desktop runtime dependencies.`);
+}
+await rm(claudeNativeDest, { recursive: true, force: true });
+await cp(claudeNative, claudeNativeDest, { recursive: true });
+console.log(`copied @anthropic-ai/${claudeNativeName} into the standalone bundle`);
+
 // The SDK resolves a platform-specific CLI package at runtime.
 for (const name of ["codex-sdk", "codex", `codex-${process.platform}-${process.arch}`]) {
   const source = path.join(root, "node_modules", "@openai", name);
