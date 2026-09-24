@@ -8,6 +8,9 @@ export const codexSubscriptionProvider: AIProvider = {
   id: "codex-subscription",
   label: "Codex subscription (desktop)",
   defaultModel: "default",
+  // Subscription model availability belongs to the local Codex CLI account,
+  // so the catalogue intentionally contains only the provider fallback. The
+  // settings UI accepts any explicit model id without requiring a code update.
   models: [{ id: "default", label: "Codex default model" }],
   docsUrl: "https://learn.chatgpt.com/docs/auth",
   keyHint: "Uses your local Codex ChatGPT sign-in, without an API key",

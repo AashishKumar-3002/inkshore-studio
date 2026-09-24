@@ -44,9 +44,10 @@ for (const [from, to] of [
 for (const [from, to] of [
   [path.join(root, "drizzle"), path.join(standalone, "drizzle")],
   [
-    path.join(root, "scripts", "migrate-local.mjs"),
-    path.join(standalone, "migrate-local.mjs"),
+    path.join(root, "scripts", "migrate.mjs"),
+    path.join(standalone, "migrate.mjs"),
   ],
+  [path.join(root, "scripts", "lib"), path.join(standalone, "lib")],
 ]) {
   await rm(to, { recursive: true, force: true });
   await cp(from, to, { recursive: true });
@@ -56,11 +57,19 @@ for (const [from, to] of [
 // PGlite carries a WASM payload that Next's tracer resolves inconsistently,
 // and the Agent SDK is an optional dependency it may skip entirely. Both
 // have to be present at runtime, so copy them in rather than hope.
-const pglite = path.join(root, "node_modules", "@electric-sql", "pglite");
-const pgliteDest = path.join(standalone, "node_modules", "@electric-sql", "pglite");
-if ((await exists(pglite)) && !(await exists(pgliteDest))) {
-  await cp(pglite, pgliteDest, { recursive: true });
-  console.log("copied @electric-sql/pglite into the standalone bundle");
+for (const name of [
+  "drizzle-orm",
+  "fractional-indexing",
+  path.join("@electric-sql", "pglite"),
+]) {
+  const source = path.join(root, "node_modules", name);
+  const target = path.join(standalone, "node_modules", name);
+  if (!(await exists(source))) {
+    throw new Error(`Missing ${name}; install desktop runtime dependencies.`);
+  }
+  await rm(target, { recursive: true, force: true });
+  await cp(source, target, { recursive: true });
+  console.log(`copied ${name} into the standalone bundle`);
 }
 
 const sdk = path.join(root, "node_modules", "@anthropic-ai", "claude-agent-sdk");
@@ -69,6 +78,24 @@ if ((await exists(sdk)) && !(await exists(sdkDest))) {
   await cp(sdk, sdkDest, { recursive: true });
   console.log("copied @anthropic-ai/claude-agent-sdk into the standalone bundle");
 }
+
+// The Agent SDK resolves Claude Code from a platform-specific optional
+// package at runtime. Next cannot trace that package because the lookup is
+// dynamic, so copy the native binary explicitly with the SDK.
+const claudeNativeName = `claude-agent-sdk-${process.platform}-${process.arch}`;
+const claudeNative = path.join(root, "node_modules", "@anthropic-ai", claudeNativeName);
+const claudeNativeDest = path.join(
+  standalone,
+  "node_modules",
+  "@anthropic-ai",
+  claudeNativeName
+);
+if (!(await exists(claudeNative))) {
+  throw new Error(`Missing @anthropic-ai/${claudeNativeName}; install desktop runtime dependencies.`);
+}
+await rm(claudeNativeDest, { recursive: true, force: true });
+await cp(claudeNative, claudeNativeDest, { recursive: true });
+console.log(`copied @anthropic-ai/${claudeNativeName} into the standalone bundle`);
 
 // The SDK resolves a platform-specific CLI package at runtime.
 for (const name of ["codex-sdk", "codex", `codex-${process.platform}-${process.arch}`]) {

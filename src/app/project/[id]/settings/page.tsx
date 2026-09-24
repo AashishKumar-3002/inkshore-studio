@@ -179,18 +179,46 @@ export default function SettingsPage() {
             </Field>
 
             <Field label="Model" htmlFor="ai-model">
-              <Select
-                id="ai-model"
-                value={aiSettings.model}
-                onChange={(e) => updateAiSettings({ model: e.target.value })}
-              >
-                {provider.models.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.label}
-                    {m.vision ? " (vision)" : ""}
-                  </option>
-                ))}
-              </Select>
+              {provider.usesSubscription ? (
+                <>
+                  <Input
+                    key={`${provider.id}-${aiSettings.model}`}
+                    id="ai-model"
+                    list={`models-${provider.id}`}
+                    defaultValue={aiSettings.model}
+                    onBlur={(e) => {
+                      const model = e.target.value.trim();
+                      if (model && model !== aiSettings.model) {
+                        updateAiSettings({ model });
+                      }
+                    }}
+                    placeholder={provider.defaultModel}
+                  />
+                  <datalist id={`models-${provider.id}`}>
+                    {provider.models.map((m) => (
+                      <option key={m.id} value={m.id}>
+                        {m.label}
+                      </option>
+                    ))}
+                  </datalist>
+                  <p className="mt-1.5 text-xs text-ink-subtle">
+                    Your local subscription controls which model IDs are available. Enter a new ID here when your provider adds one.
+                  </p>
+                </>
+              ) : (
+                <Select
+                  id="ai-model"
+                  value={aiSettings.model}
+                  onChange={(e) => updateAiSettings({ model: e.target.value })}
+                >
+                  {provider.models.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.label}
+                      {m.vision ? " (vision)" : ""}
+                    </option>
+                  ))}
+                </Select>
+              )}
               {provider.models.some((m) => m.vision) && (
                 <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
                   <Badge tone="accent">Vision</Badge>
