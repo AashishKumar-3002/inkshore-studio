@@ -8,7 +8,17 @@ export const codexSubscriptionProvider: AIProvider = {
   id: "codex-subscription",
   label: "Codex subscription (desktop)",
   defaultModel: "default",
-  models: [{ id: "default", label: "Codex default model" }],
+  // The subscription CLI accepts an explicit Codex model id. Keep the
+  // provider default first, then expose the current and previous Codex model
+  // families users may have enabled in their ChatGPT plan.
+  models: [
+    { id: "default", label: "Codex default model (recommended)" },
+    { id: "gpt-5.3-codex", label: "GPT-5.3 Codex" },
+    { id: "gpt-5.2-codex", label: "GPT-5.2 Codex" },
+    { id: "gpt-5.1-codex-max", label: "GPT-5.1 Codex Max" },
+    { id: "gpt-5.1-codex", label: "GPT-5.1 Codex" },
+    { id: "gpt-5-codex", label: "GPT-5 Codex" },
+  ],
   docsUrl: "https://learn.chatgpt.com/docs/auth",
   keyHint: "Uses your local Codex ChatGPT sign-in, without an API key",
 
