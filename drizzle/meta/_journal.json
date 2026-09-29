@@ -36,6 +36,13 @@
       "when": 1789636050910,
       "tag": "0004_chapter_assistant",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790725000000,
+      "tag": "0005_master_command",
+      "breakpoints": true
     }
   ]
 }
