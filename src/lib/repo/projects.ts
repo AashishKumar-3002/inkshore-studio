@@ -16,6 +16,7 @@ import {
   SECTION_IDS,
   SectionId,
   StoryBible,
+  StoryBibleSection,
   Chapter,
   ClientProject,
   ImageSettings,
@@ -184,6 +185,28 @@ export async function saveBible(
     await tx.update(projects).set({ updatedAt: now }).where(eq(projects.id, projectId));
   });
   return getProjectMeta(projectId, userId);
+}
+
+/**
+ * Upserts one bible section. Separate from saveBible because a caller that is
+ * already inside a transaction (a confirmed master command) has to write the
+ * section and its own bookkeeping together or not at all.
+ */
+export async function saveBibleSection(
+  tx: Queryable,
+  projectId: string,
+  sectionId: SectionId,
+  section: StoryBibleSection
+): Promise<void> {
+  const now = new Date();
+  await tx
+    .insert(bibleSections)
+    .values({ projectId, sectionId, answers: section.answers, notes: section.notes, updatedAt: now })
+    .onConflictDoUpdate({
+      target: [bibleSections.projectId, bibleSections.sectionId],
+      set: { answers: section.answers, notes: section.notes, updatedAt: now },
+    });
+  await tx.update(projects).set({ updatedAt: now }).where(eq(projects.id, projectId));
 }
 
 /** Project summaries for the dashboard — no chapter bodies loaded. */
@@ -441,7 +464,7 @@ export async function importProject(
 /** Anything that can run a query — the pool, or a transaction handle. */
 type Db = typeof db;
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
-type Queryable = Db | Tx;
+export type Queryable = Db | Tx;
 
 /**
  * The last live chapter's sortKey and how many live chapters there are.
@@ -575,13 +598,25 @@ export async function deleteChapter(
   return true;
 }
 
-/** Bulk chapter upload — appended in order, in one transaction. */
+/**
+ * Bulk chapter creation — appended in order, in one transaction. Used by the
+ * file upload (which carries content) and by a confirmed master-command
+ * chapter plan (which carries an idea and no prose).
+ */
 export async function createChapters(
   projectId: string,
-  items: { title: string; content: string; status: Chapter["status"] }[]
+  items: {
+    title: string;
+    content: string;
+    status: Chapter["status"];
+    idea?: string;
+    mode?: Chapter["mode"];
+  }[],
+  /** An open transaction to join, so a caller can make this part of a larger atomic write. */
+  outer?: Queryable
 ): Promise<Chapter[]> {
   if (items.length === 0) return [];
-  return db.transaction(async (tx) => {
+  const insert = async (tx: Queryable) => {
     const { lastKey, count } = await tailOf(tx, projectId);
     const keys = generateNKeysBetween(lastKey, null, items.length);
 
@@ -592,17 +627,19 @@ export async function createChapters(
           projectId,
           sortKey: keys[i],
           title: item.title?.trim() || `Chapter ${count + i + 1}`,
+          idea: item.idea ?? "",
           content: item.content,
           status: item.status,
           wordCount: wordCount(item.content),
-          mode: "manual" as const,
+          mode: item.mode ?? ("manual" as const),
         }))
       )
       .returning();
 
     await bumpProject(tx, projectId);
     return rows.map((row, i) => toChapter(row, count + i + 1));
-  });
+  };
+  return outer ? insert(outer) : db.transaction(insert);
 }
 
 /* ------------------------------------------------------------------ */
