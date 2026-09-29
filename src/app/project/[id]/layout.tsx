@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 import ProjectName from "@/components/ProjectName";
 import ProjectTopBar from "@/components/ProjectTopBar";
+import MasterCommand from "@/components/MasterCommand";
 import { Wordmark } from "@/components/Brand";
 import { ThemeToggle } from "@/components/ThemeProvider";
 import { UserMenu } from "@/components/UserMenu";
@@ -29,6 +30,7 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
           <Wordmark href="/dashboard" />
           <ProjectName key={params.id} projectId={params.id} />
           <div className="ml-auto flex shrink-0 items-center gap-2">
+            {!isOnboarding && <MasterCommand projectId={params.id} />}
             <span className="hidden sm:block">
               <ThemeToggle />
             </span>

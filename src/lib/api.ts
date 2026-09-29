@@ -1,4 +1,5 @@
 import type { AssistantEntry, AssistantRequest } from "./chapterAssistant";
+import type { MasterCommandRun } from "./masterCommand";
 import { withAIActivity } from "./aiActivity";
 import {
   AISettings,
@@ -235,6 +236,19 @@ export const api = {
     post(`/api/projects/${id}/chapters/${chapterId}/assistant/apply`, { entryId, expectedContent, acceptedChanges }).then(r => json<{ chapter: Chapter; version: AssistantEntry }>(r)),
   dismissChapterAssistant: (id: string, chapterId: string, entryId: string) =>
     fetch(`/api/projects/${id}/chapters/${chapterId}/assistant`, { method: "DELETE", headers: jsonHeaders, body: JSON.stringify({ entryId }) }).then(r => json<{ ok: boolean }>(r)),
+
+  /* Master command */
+  masterCommandHistory: (id: string) =>
+    fetch(`/api/projects/${id}/master-command`).then(r => json<MasterCommandRun[]>(r)),
+  runMasterCommand: (id: string, transcript: string, signal?: AbortSignal) =>
+    withAIActivity("Thinking about your book…", "Command ready", () =>
+      fetch(`/api/projects/${id}/master-command`, { method: "POST", headers: jsonHeaders, body: JSON.stringify({ transcript }), signal }).then(r => json<MasterCommandRun>(r))
+    ),
+  /** `idempotencyKey` is minted once per run, so retrying a failed confirm can't apply it twice. */
+  applyMasterCommand: (id: string, runId: string, idempotencyKey: string) =>
+    post(`/api/projects/${id}/master-command/apply`, { runId, idempotencyKey }).then(r => json<{ run: MasterCommandRun; chapters: Chapter[] }>(r)),
+  dismissMasterCommand: (id: string, runId: string) =>
+    fetch(`/api/projects/${id}/master-command`, { method: "DELETE", headers: jsonHeaders, body: JSON.stringify({ runId }) }).then(r => json<{ ok: boolean }>(r)),
 
   /* Storyboard */
   saveStoryboard: (id: string, storyboard: Pick<Storyboard, "notes" | "strokes">) =>

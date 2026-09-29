@@ -15,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { api, ApiError } from "@/lib/api";
+import { subscribeProjectChanged } from "@/lib/projectChanged";
 import { Chapter, ChapterStatus } from "@/lib/types";
 import {
   Badge,
@@ -133,6 +134,9 @@ export default function ChaptersPage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  /** A confirmed master command adds chapters from the header — pick them up. */
+  useEffect(() => subscribeProjectChanged(load), [load]);
 
   /** Retry from the error state — a click handler, so setState is fine. */
   const retry = useCallback(() => {
