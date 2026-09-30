@@ -12,6 +12,7 @@ import {
 import { AnswerValue, SECTION_IDS, SectionId, StoryBible } from "@/lib/types";
 import QuestionCard, { emptyAnswer } from "@/components/QuestionCard";
 import { api } from "@/lib/api";
+import { subscribeProjectChanged } from "@/lib/projectChanged";
 import {
   Badge,
   Button,
@@ -57,6 +58,9 @@ export default function BiblePage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  /** A confirmed master command appends notes from the header — pick them up. */
+  useEffect(() => subscribeProjectChanged(load), [load]);
 
   /** Retry from the error state — a click handler, so setState is fine. */
   const retry = useCallback(() => {

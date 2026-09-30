@@ -16,6 +16,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import type {
   AISettings,
@@ -190,6 +191,31 @@ export const chapters = pgTable(
   },
   (t) => [index("chapter_project_sort_idx").on(t.projectId, t.sortKey)]
 );
+
+/**
+ * Master command runs: one row per proposal the project-level agent made.
+ *
+ * The proposal is persisted rather than handed back to the browser and
+ * replayed on confirm, so what gets applied is provably what was reviewed,
+ * and `idempotencyKey` makes a retried confirm a no-op instead of a second
+ * set of chapters.
+ */
+export const projectCommandRuns = pgTable("project_command_run", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  projectId: text("projectId").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  status: text("status").$type<import("../masterCommand").MasterCommandStatus>().notNull().default("proposed"),
+  /** What the author typed or dictated. */
+  transcript: text("transcript").notNull(),
+  payload: jsonb("payload").$type<import("../masterCommand").MasterCommandPayload>().notNull(),
+  /** Null until confirmed; unique so a replay can be recognised rather than re-run. */
+  idempotencyKey: text("idempotencyKey"),
+  appliedAt: timestamp("appliedAt", { withTimezone: true }),
+  createdAt: timestamp("createdAt", { withTimezone: true }).notNull().$defaultFn(() => new Date()),
+  deletedAt: timestamp("deletedAt", { withTimezone: true }),
+}, t => [
+  index("project_command_run_history_idx").on(t.projectId, t.createdAt),
+  uniqueIndex("project_command_run_idempotency_idx").on(t.idempotencyKey),
+]);
 
 /** Append-only chapter assistant outputs and pre-edit snapshots. */
 export const chapterAssistantEntries = pgTable("chapter_assistant_entry", {
