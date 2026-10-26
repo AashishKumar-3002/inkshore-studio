@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { BookText, Plus, Search, Trash2, Upload } from "lucide-react";
+import { ArrowRight, BookOpen, BookText, Plus, Search, Trash2, Upload } from "lucide-react";
 import { api, type ProjectSummary } from "@/lib/api";
 import {
   Badge,
@@ -13,11 +13,7 @@ import {
   EmptyState,
   ErrorState,
   Input,
-  Lbl,
-  PageHeader,
-  Panel,
   Skeleton,
-  StatBand,
 } from "@/components/ui";
 
 function projectHref(p: { id: string; onboardingComplete: boolean }) {
@@ -127,29 +123,26 @@ export function DashboardClient() {
         (p.book?.title || "").toLowerCase().includes(q)
     );
   }, [projects, query]);
+  const featured = query.trim() ? null : visible[0] ?? null;
+  const remaining = featured ? visible.slice(1) : visible;
 
   return (
     <>
-      <PageHeader
-        title="Your projects"
-        description="Pick up where you left off, or start something new."
-        actions={
-          <>
-            <Button
-              variant="secondary"
-              onClick={() => fileInputRef.current?.click()}
-              loading={importing}
-            >
-              <Upload className="h-3.5 w-3.5" />
-              Import
-            </Button>
-            <Button onClick={createProject} loading={creating}>
-              <Plus className="h-3.5 w-3.5" />
-              New project
-            </Button>
-          </>
-        }
-      />
+      <div className="flex flex-wrap items-end justify-between gap-5">
+        <div>
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent">Your library</p>
+          <h1 className="font-[family-name:var(--font-manuscript)] text-[clamp(34px,5vw,50px)] leading-tight tracking-[-0.035em] text-ink">Stories in progress</h1>
+          <p className="mt-2 text-sm text-ink-muted">A place for every world you are writing.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="secondary" onClick={() => fileInputRef.current?.click()} loading={importing}>
+            <Upload className="h-3.5 w-3.5" /> Import
+          </Button>
+          <Button onClick={createProject} loading={creating}>
+            <Plus className="h-3.5 w-3.5" /> New project
+          </Button>
+        </div>
+      </div>
       <input
         ref={fileInputRef}
         type="file"
@@ -161,20 +154,11 @@ export function DashboardClient() {
         }}
       />
 
-      {projects.length > 0 && (
-        <StatBand
-          className="mt-7"
-          stats={[
-            { value: totals.words.toLocaleString(), label: "Words written" },
-            { value: totals.chapters, label: "Chapters" },
-            { value: projects.length, label: "Projects" },
-            {
-              value: projects.filter((p) => p.onboardingComplete).length,
-              label: "Bibles complete",
-            },
-          ]}
-        />
-      )}
+      {projects.length > 0 && <div className="mt-8 grid grid-cols-3 gap-3 border-y border-line py-5 sm:max-w-[620px] sm:gap-8">
+        <div><p className="font-[family-name:var(--font-manuscript)] text-2xl text-ink">{projects.length}</p><p className="mt-1 text-xs text-ink-muted">{projects.length === 1 ? "Story" : "Stories"}</p></div>
+        <div><p className="font-[family-name:var(--font-manuscript)] text-2xl text-ink">{totals.chapters.toLocaleString()}</p><p className="mt-1 text-xs text-ink-muted">Chapters</p></div>
+        <div><p className="font-[family-name:var(--font-manuscript)] text-2xl text-ink">{totals.words.toLocaleString()}</p><p className="mt-1 text-xs text-ink-muted">Words written</p></div>
+      </div>}
 
       <section className="mt-7">
         {loading ? (
@@ -209,87 +193,52 @@ export function DashboardClient() {
           />
         ) : (
           <>
-            {projects.length > 4 && (
-              <div className="relative mb-3 max-w-xs">
-                <Search
-                  className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-subtle"
-                  aria-hidden
-                />
-                <Input
-                  className="pl-8"
-                  placeholder="Search projects"
-                  aria-label="Search projects"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-              </div>
-            )}
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-sm font-semibold text-ink">{query.trim() ? "Search results" : "Continue your story"}</h2>
+              {projects.length > 4 && <div className="relative w-full sm:w-64">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-subtle" aria-hidden />
+                <Input className="pl-9" placeholder="Search your library" aria-label="Search projects" value={query} onChange={event => setQuery(event.target.value)} />
+              </div>}
+            </div>
 
-            <Panel>
-              <div className="hidden items-center gap-4 border-b border-hair bg-surface-2/50 px-4 py-2 sm:flex">
-                <Lbl className="flex-1">Project</Lbl>
-                <Lbl className="w-16 text-right">Chapters</Lbl>
-                <Lbl className="w-20 text-right">Words</Lbl>
-                <Lbl className="w-24">Status</Lbl>
-                <Lbl className="w-16 text-right">Edited</Lbl>
-                <span className="w-8" />
-              </div>
+            {visible.length === 0 ? <p className="rounded-xl border border-line bg-surface px-4 py-10 text-center text-sm text-ink-muted">No projects match &ldquo;{query}&rdquo;.</p> : <>
+              {featured && <article className="relative grid overflow-hidden rounded-2xl border border-line bg-surface shadow-sm lg:grid-cols-[minmax(0,1fr)_310px]">
+                <div className="flex flex-col justify-between gap-8 p-6 sm:p-8">
+                  <div>
+                    <div className="mb-5 flex items-center justify-between gap-3"><div className="flex items-center gap-2"><Badge tone={featured.onboardingComplete ? "success" : "warning"}>{featured.onboardingComplete ? "Ready to write" : "Setup in progress"}</Badge><span className="text-xs text-ink-subtle">Edited {formatRelative(featured.updatedAt)}</span></div><button type="button" aria-label={`Delete ${featured.book?.title || featured.name}`} title="Delete project" onClick={() => setPendingDelete(featured)} className="grid h-8 w-8 place-items-center rounded-lg text-ink-subtle transition-colors hover:bg-danger-soft hover:text-danger"><Trash2 className="h-4 w-4" aria-hidden /></button></div>
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">Most recent story</p>
+                    <h3 className="max-w-[620px] font-[family-name:var(--font-manuscript)] text-[clamp(28px,4vw,42px)] leading-tight tracking-[-0.03em] text-ink">{featured.book?.title || featured.name}</h3>
+                    {featured.book?.title && featured.book.title !== featured.name && <p className="mt-2 text-sm text-ink-muted">{featured.name}</p>}
+                  </div>
+                  <div className="flex flex-wrap items-end justify-between gap-5">
+                    <div className="flex items-center gap-5 text-xs text-ink-muted"><span>{featured.chapterCount} chapter{featured.chapterCount === 1 ? "" : "s"}</span><span>{featured.wordCount.toLocaleString()} words</span></div>
+                    <Link href={projectHref(featured)} className="inline-flex items-center gap-2 rounded-lg bg-solid px-4 py-2.5 text-sm font-medium text-solid-ink transition-colors hover:bg-solid-hover">{featured.onboardingComplete ? "Open studio" : "Continue setup"}<ArrowRight className="h-4 w-4" aria-hidden /></Link>
+                  </div>
+                </div>
+                <div className="relative hidden min-h-[280px] items-center justify-center overflow-hidden bg-[#214f43] p-10 lg:flex">
+                  <div className="absolute inset-0 opacity-30 [background:radial-gradient(circle_at_65%_20%,#a9c9b4,transparent_55%)]" />
+                  <div className="relative flex h-[220px] w-[154px] flex-col border border-white/25 bg-[#315f4f] p-5 text-white shadow-lg [box-shadow:10px_15px_0_0_#163c32,14px_19px_28px_#102e28]">
+                    <BookOpen className="h-5 w-5 opacity-80" aria-hidden />
+                    <span className="mt-auto line-clamp-3 font-[family-name:var(--font-manuscript)] text-xl leading-tight">{featured.book?.title || featured.name}</span>
+                    <span className="mt-3 h-px w-9 bg-white/65" />
+                  </div>
+                </div>
+              </article>}
 
-              {visible.length === 0 ? (
-                <p className="px-4 py-8 text-center text-[13px] text-ink-muted">
-                  No projects match &ldquo;{query}&rdquo;.
-                </p>
-              ) : (
-                visible.map((p) => {
-                  const title = p.book?.title || p.name;
-                  return (
-                    <div
-                      key={p.id}
-                      className="group flex items-center gap-4 border-b border-hair px-4 py-2.5 transition-colors last:border-b-0 hover:bg-surface-2/60"
-                    >
-                      <Link href={projectHref(p)} className="min-w-0 flex-1">
-                        <span className="block truncate text-[13px] font-medium">
-                          {title}
-                        </span>
-                        <span className="mt-0.5 block truncate text-xs text-ink-muted">
-                          {p.name !== title && `${p.name} · `}
-                          <span className="sm:hidden">
-                            {p.chapterCount} ch · {p.wordCount.toLocaleString()} words ·{" "}
-                          </span>
-                          {formatRelative(p.updatedAt)}
-                        </span>
-                      </Link>
-
-                      <span className="tnum hidden w-16 text-right text-[13px] text-ink-muted sm:block">
-                        {p.chapterCount}
-                      </span>
-                      <span className="tnum hidden w-20 text-right text-[13px] text-ink-muted sm:block">
-                        {p.wordCount > 0 ? p.wordCount.toLocaleString() : "—"}
-                      </span>
-                      <span className="hidden w-24 sm:block">
-                        {p.onboardingComplete ? (
-                          <Badge tone="success">Ready</Badge>
-                        ) : (
-                          <Badge tone="warning">Setup</Badge>
-                        )}
-                      </span>
-                      <span className="tnum hidden w-16 text-right text-xs text-ink-subtle sm:block">
-                        {formatRelative(p.updatedAt)}
-                      </span>
-
-                      <button
-                        aria-label={`Delete ${title}`}
-                        title="Delete project"
-                        onClick={() => setPendingDelete(p)}
-                        className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-ink-subtle opacity-0 transition-all hover:bg-danger-soft hover:text-danger focus-visible:opacity-100 group-hover:opacity-100"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  );
-                })
-              )}
-            </Panel>
+              {remaining.length > 0 && <div className="mt-9">
+                <h2 className="mb-4 text-sm font-semibold text-ink">{featured ? "All stories" : `${remaining.length} ${remaining.length === 1 ? "story" : "stories"}`}</h2>
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  {remaining.map(p => {
+                    const title = p.book?.title || p.name;
+                    return <article key={p.id} className="group flex min-h-[230px] flex-col rounded-xl border border-line bg-surface p-5 shadow-xs transition-all hover:-translate-y-0.5 hover:border-line-strong hover:shadow-md">
+                      <div className="flex items-start justify-between gap-3"><div className="grid h-10 w-10 place-items-center rounded-lg bg-accent-soft text-accent"><BookText className="h-5 w-5" aria-hidden /></div><button type="button" aria-label={`Delete ${title}`} title="Delete project" onClick={() => setPendingDelete(p)} className="grid h-8 w-8 place-items-center rounded-lg text-ink-subtle transition-colors hover:bg-danger-soft hover:text-danger"><Trash2 className="h-4 w-4" aria-hidden /></button></div>
+                      <Link href={projectHref(p)} className="mt-5 block flex-1"><h3 className="line-clamp-2 font-[family-name:var(--font-manuscript)] text-[23px] leading-tight text-ink group-hover:text-accent">{title}</h3>{p.book?.title && p.book.title !== p.name && <p className="mt-1 truncate text-xs text-ink-muted">{p.name}</p>}</Link>
+                      <div className="mt-6 flex items-center justify-between gap-3 border-t border-hair pt-3 text-xs text-ink-muted"><span>{p.chapterCount} ch · {p.wordCount.toLocaleString()} words</span><span>{formatRelative(p.updatedAt)}</span></div>
+                    </article>;
+                  })}
+                </div>
+              </div>}
+            </>}
           </>
         )}
       </section>
