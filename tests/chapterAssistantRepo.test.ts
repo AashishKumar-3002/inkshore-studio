@@ -9,7 +9,7 @@ import { defaultAISettings, defaultBookMeta, defaultImageSettings, defaultRollin
 const state = vi.hoisted(() => ({ db: null as unknown }));
 vi.mock("@/lib/db", () => ({ get db() { return state.db; } }));
 vi.mock("@/lib/apiHelpers", () => ({ ApiProblem: class extends Error { constructor(public status: number, message: string) { super(message); } } }));
-import { applyAssistantResult, assistantHistory, dismissAssistantResult, saveAssistantResult } from "@/lib/repo/chapterAssistant";
+import { applyAssistantResult, assistantHistory, dismissAssistantResult, saveAssistantResult, saveChapterVersion } from "@/lib/repo/chapterAssistant";
 const client = new PGlite();
 const database = drizzle(client, { schema });
 state.db = database;
@@ -27,6 +27,15 @@ beforeEach(async () => {
 afterAll(() => client.close());
 
 describe("atomic chapter assistant apply", () => {
+  it("saves a named manual version only for the owner and current chapter content", async () => {
+    await expect(saveChapterVersion("p", "c", "someone-else", source, "Opening draft")).rejects.toMatchObject({ status: 404 });
+    await expect(saveChapterVersion("p", "c", "owner", "older text", "Opening draft")).rejects.toMatchObject({ status: 409 });
+    const version = await saveChapterVersion("p", "c", "owner", source, "Opening draft");
+    expect(version.kind).toBe("version");
+    expect(version.sourceContent).toBe(source);
+    expect(version.payload.label).toBe("Opening draft");
+    expect((await assistantHistory("p", "c", "owner"))[0].id).toBe(version.id);
+  });
   it("scopes history and every write to the chapter owner", async () => {
     expect(await assistantHistory("p", "c", "someone-else")).toEqual([]);
     await expect(saveAssistantResult("p", "c", "someone-else", source, { action: "rewrite", replacement: "x" })).rejects.toMatchObject({ status: 404 });
