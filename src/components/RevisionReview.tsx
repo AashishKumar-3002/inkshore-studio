@@ -29,23 +29,39 @@ export default function RevisionReview({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef(onClose);
+  const applyingRef = useRef(applying);
 
   useEffect(() => { closeRef.current = onClose; }, [onClose]);
+  useEffect(() => { applyingRef.current = applying; }, [applying]);
 
   useEffect(() => {
     if (!open) return;
+    const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     panelRef.current?.focus();
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !applying) closeRef.current();
+      if (event.key === "Escape" && !applyingRef.current) closeRef.current();
+      if (event.key !== "Tab") return;
+      const panel = panelRef.current;
+      if (!panel) return;
+      const controls = Array.from(panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'));
+      const first = controls[0], last = controls.at(-1);
+      if (!first || !last) { event.preventDefault(); panel.focus(); return; }
+      if (event.shiftKey && (document.activeElement === panel || document.activeElement === first || !panel.contains(document.activeElement))) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || !panel.contains(document.activeElement))) {
+        event.preventDefault(); first.focus();
+      }
     };
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previous;
       document.removeEventListener("keydown", onKeyDown);
+      if (returnFocus?.isConnected) returnFocus.focus();
+      else document.querySelector<HTMLElement>("[data-review-trigger]")?.focus();
     };
-  }, [open, applying]);
+  }, [open]);
 
   if (!open) return null;
 
