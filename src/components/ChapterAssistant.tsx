@@ -13,8 +13,9 @@ const ACTION_LABELS: Record<AssistantAction, string> = { ask: "Ask", rewrite: "R
 const FOCUS_OPTIONS = { dialogue: "Natural dialogue", rhythm: "Sentence rhythm", repetition: "Less repetition", specificity: "Stronger specificity" } as const;
 type Focus = keyof typeof FOCUS_OPTIONS;
 
-export default function ChapterAssistant({ projectId, chapterId, open, action, onActionChange, onClose, content, selection, onSelectionChange, locked, providerLabel, beforeApply, onApplied, onApplyingChange, onReveal }: {
+export default function ChapterAssistant({ projectId, chapterId, open, action, onActionChange, onClose, historyOpen, onHistoryOpenChange, content, selection, onSelectionChange, locked, providerLabel, beforeApply, onApplied, onApplyingChange, onReveal }: {
   projectId: string; chapterId: string; open: boolean; action: AssistantAction; onActionChange: (action: AssistantAction) => void; onClose: () => void;
+  historyOpen: boolean; onHistoryOpenChange: (open: boolean) => void;
   content: string; selection: TextSelection | null; onSelectionChange: (selection: TextSelection | null) => void;
   locked: boolean; providerLabel: string; beforeApply: () => Promise<void>; onApplied: (chapter: Chapter) => void; onApplyingChange: (busy: boolean) => void; onReveal: (range: TextSelection) => void;
 }) {
@@ -29,7 +30,8 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
   const [applying, setApplying] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<AssistantEntry[]>([]);
-  const [historyOpen, setHistoryOpen] = useState(false);
+  const [versionLabel, setVersionLabel] = useState("");
+  const [savingVersion, setSavingVersion] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   type ResultView = { entry: AssistantEntry; action: AssistantAction; accepted: number[]; appliedId: string | null };
   const [view, setView] = useState<{ entry: AssistantEntry; action: AssistantAction } | null>(null);
@@ -91,7 +93,19 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
     setReviewOpen(entry.kind === "result" && entry.payload.replacement !== undefined);
     setClosedModes(current => ({ ...current, [mode]: false }));
     setAppliedId(null);
-    setHistoryOpen(false);
+    onHistoryOpenChange(false);
+  }
+  async function saveVersion() {
+    if (savingVersion || applying || busy) return;
+    setSavingVersion(true); setError(null);
+    try {
+      await beforeApply();
+      const entry = await api.saveChapterVersion(projectId, chapterId, content, versionLabel);
+      setHistory(previous => [entry, ...previous]);
+      setVersionLabel("");
+      toast.success("Chapter version saved.");
+    } catch (e) { setError(e instanceof Error ? e.message : "Couldn't save this version."); }
+    finally { setSavingVersion(false); }
   }
   async function run(retryEntry?: AssistantEntry) {
     if (busy || applying) return;
@@ -149,7 +163,7 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
       <div className="mb-3 flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 text-sm font-semibold"><Sparkles className="h-4 w-4 text-accent" />Writing assistant</h2>
         <div className="flex gap-1">
-          <Button variant="ghost" size="icon" aria-label="Assistant history" aria-expanded={historyOpen} onClick={() => setHistoryOpen(value => !value)}><History className="h-4 w-4" /></Button>
+          <Button variant="ghost" size="icon" aria-label="Assistant history" aria-expanded={historyOpen} onClick={() => onHistoryOpenChange(!historyOpen)}><History className="h-4 w-4" /></Button>
           <Button variant="ghost" size="icon" aria-label="Close chapter assistant" onClick={onClose}><X className="h-4 w-4" /></Button>
         </div>
       </div>
@@ -157,10 +171,16 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
         {(Object.keys(ACTION_LABELS) as AssistantAction[]).map(mode => <Button key={mode} size="sm" variant={action === mode ? "secondary" : "ghost"} disabled={busy || applying} aria-pressed={action === mode} onClick={() => onActionChange(mode)}>{ACTION_LABELS[mode]}</Button>)}
       </div>
       {historyOpen && <div className="mb-4 max-h-64 space-y-2 overflow-y-auto rounded-lg border border-line p-3">
-        <div className="flex items-center justify-between gap-2"><h3 className="text-xs font-medium">Saved responses & versions</h3><button type="button" className="text-xs text-accent hover:underline" onClick={() => setHistoryOpen(false)}>Back to assistant</button></div>
+        <div className="flex items-center justify-between gap-2"><h3 className="text-xs font-medium">Saved responses & versions</h3><button type="button" className="text-xs text-accent hover:underline" onClick={() => onHistoryOpenChange(false)}>Back to assistant</button></div>
+        <div className="space-y-2 border-b border-line pb-3">
+          <label htmlFor="version-label" className="block text-xs text-ink-muted">Name this checkpoint (optional)</label>
+          <input id="version-label" value={versionLabel} maxLength={80} onChange={event => setVersionLabel(event.target.value)} placeholder="Before the final edit"
+            className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-xs text-ink outline-none focus:border-accent" />
+          <Button size="sm" variant="secondary" loading={savingVersion} disabled={busy || applying || savingVersion} onClick={() => void saveVersion()}>Save version</Button>
+        </div>
         {!history.length && <p className="text-xs text-ink-muted">Responses and pre-edit versions will appear here.</p>}
         {history.map(entry => <button key={entry.id} type="button" className="block w-full rounded p-2 text-left text-xs hover:bg-surface-2" onClick={() => { chooseEntry(entry, entry.payload.action); onActionChange(entry.payload.action); setInstruction(entry.payload.instruction ?? "", entry.payload.action); onSelectionChange(entry.sourceContent === content ? entry.payload.selection ?? null : null); }}>
-          <span className="font-medium">{entry.kind === "version" ? "Saved original" : ACTION_LABELS[entry.payload.action]}</span><span className="ml-2 text-ink-muted">{new Date(entry.createdAt).toLocaleString()}</span>
+          <span className="font-medium">{entry.kind === "version" ? entry.payload.label || "Saved original" : ACTION_LABELS[entry.payload.action]}</span><span className="ml-2 text-ink-muted">{new Date(entry.createdAt).toLocaleString()}</span>
         </button>)}
       </div>}
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
@@ -190,7 +210,7 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
           <Button size="sm" variant="ghost" disabled={busy || applying} onClick={goBack}><ArrowLeft className="h-3.5 w-3.5" aria-hidden />{previousViews.length ? "Back to previous view" : "Back to assistant"}</Button>
           <Button size="sm" variant="ghost" disabled={busy || applying} onClick={closeResult}>Close result</Button>
         </div>
-        <div className="flex items-center justify-between gap-2"><h3 className="text-sm font-medium">{selected.kind === "version" ? "Saved original" : ACTION_LABELS[selected.payload.action] === "Revise" ? "Suggested revision" : `${ACTION_LABELS[selected.payload.action]} result`}</h3>{(appliedId === selected.id || appliedChanges.length > 0) && <Badge tone="accent">{appliedChanges.length > 0 && appliedChanges.length < changes.length ? "Partially applied" : "Applied"}</Badge>}</div>
+        <div className="flex items-center justify-between gap-2"><h3 className="text-sm font-medium">{selected.kind === "version" ? selected.payload.label || "Saved original" : ACTION_LABELS[selected.payload.action] === "Revise" ? "Suggested revision" : `${ACTION_LABELS[selected.payload.action]} result`}</h3>{(appliedId === selected.id || appliedChanges.length > 0) && <Badge tone="accent">{appliedChanges.length > 0 && appliedChanges.length < changes.length ? "Partially applied" : "Applied"}</Badge>}</div>
         {stale && <p role="status" className="rounded-lg border border-warning-border bg-warning-soft p-3 text-xs text-warning">Chapter changed since this response. {analysis ? "Analyze again for an up-to-date report." : "Request a new revision before applying changes."}</p>}
         {selected.payload.answer && <div className="whitespace-pre-wrap text-[13px] leading-relaxed text-ink">{selected.payload.answer}</div>}
         {analysis && <>

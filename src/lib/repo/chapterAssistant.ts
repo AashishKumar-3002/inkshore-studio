@@ -18,6 +18,15 @@ export async function saveAssistantResult(projectId: string, chapterId: string, 
     return entry;
   });
 }
+export async function saveChapterVersion(projectId: string, chapterId: string, userId: string, expectedContent: string, label: string) {
+  return db.transaction(async tx => {
+    const [owned] = await tx.select({ chapter: chapters }).from(chapters).innerJoin(projects, eq(chapters.projectId, projects.id)).where(scope(projectId, chapterId, userId)).for("update");
+    if (!owned) throw new ApiProblem(404, "Chapter not found.");
+    if (owned.chapter.content !== expectedContent) throw new ApiProblem(409, "The saved chapter changed. Save or reload it before creating a version.");
+    const [entry] = await tx.insert(entries).values({ chapterId, kind: "version", sourceContent: expectedContent, payload: { action: "rewrite", label: label || "Manual checkpoint" } }).returning();
+    return entry;
+  });
+}
 export async function dismissAssistantResult(projectId: string, chapterId: string, userId: string, entryId: string) {
   return db.transaction(async tx => {
     const [owned] = await tx.select({ id: chapters.id }).from(chapters).innerJoin(projects, eq(chapters.projectId, projects.id)).where(scope(projectId, chapterId, userId)).for("update");

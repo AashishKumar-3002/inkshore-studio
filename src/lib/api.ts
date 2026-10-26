@@ -226,6 +226,8 @@ export const api = {
   /* Chapter assistant */
   chapterAssistantHistory: (id: string, chapterId: string) =>
     fetch(`/api/projects/${id}/chapters/${chapterId}/assistant`).then(r => json<AssistantEntry[]>(r)),
+  saveChapterVersion: (id: string, chapterId: string, expectedContent: string, label: string) =>
+    post(`/api/projects/${id}/chapters/${chapterId}/assistant/versions`, { expectedContent, label }).then(r => json<AssistantEntry>(r)),
   runChapterAssistant: (id: string, chapterId: string, request: AssistantRequest, signal?: AbortSignal) => {
     const headings = { ask: "Considering your question…", rewrite: "Preparing a revision…", analyze: "Analyzing chapter…", humanize: "Polishing your writing…" };
     return withAIActivity(headings[request.action], request.action === "analyze" ? "Chapter analysis ready" : "Assistant response ready", () =>

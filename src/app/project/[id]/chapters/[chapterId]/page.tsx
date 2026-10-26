@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Download,
   Focus,
+  History,
   Lock,
   LockOpen,
   PanelRightClose,
@@ -82,6 +83,7 @@ export default function ChapterWorkspacePage() {
   const [tab, setTab] = useState<TabId>("edit");
   const [suggesting, setSuggesting] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [recoveredDraft, setRecoveredDraft] = useState(false);
   const [recoveryCandidate, setRecoveryCandidate] = useState<LocalChapterDraft | null>(null);
@@ -439,6 +441,9 @@ export default function ChapterWorkspacePage() {
           <Button variant="secondary" size="sm" onClick={() => { setTab("edit"); setFocusMode(true); }}>
             <Focus className="h-3.5 w-3.5" aria-hidden /> Focus
           </Button>
+          <Button variant="secondary" size="sm" onClick={() => { setAssistantOpen(true); setHistoryOpen(true); }}>
+            <History className="h-3.5 w-3.5" aria-hidden /> Versions
+          </Button>
           <Button variant={assistantOpen ? "secondary" : "primary"} size="sm" onClick={() => setAssistantOpen(value => !value)}>
             {assistantOpen ? <PanelRightClose className="h-3.5 w-3.5" aria-hidden /> : <PanelRightOpen className="h-3.5 w-3.5" aria-hidden />}
             {assistantOpen ? "Close assistant" : "Ask AI"}
@@ -680,7 +685,8 @@ export default function ChapterWorkspacePage() {
         <ChapterAssistant
           key={chapterId}
           projectId={id} chapterId={chapterId} open={assistantOpen && !focusMode} action={assistantAction}
-          onActionChange={setAssistantAction} onClose={() => setAssistantOpen(false)}
+          onActionChange={setAssistantAction} onClose={() => { setAssistantOpen(false); setHistoryOpen(false); }}
+          historyOpen={historyOpen} onHistoryOpenChange={setHistoryOpen}
           content={content} selection={selection} onSelectionChange={setSelection}
           locked={locked} providerLabel={({ anthropic: "Claude", openai: "OpenAI", openrouter: "OpenRouter", nvidia: "NVIDIA NIM", "claude-subscription": "Claude subscription", "codex-subscription": "Codex subscription" })[project.aiSettings.provider]}
           onApplyingChange={setApplying} onReveal={revealPassage}

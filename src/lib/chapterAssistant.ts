@@ -19,7 +19,7 @@ export const analysisSchema = z.object({
   improvements: z.array(z.object({ quote: z.string().min(1).max(2000), issue: z.string().min(1).max(4000), suggestion: z.string().min(1).max(4000) })).min(1).max(3),
 });
 export type ChapterAnalysis = z.infer<typeof analysisSchema> & { overall: number };
-export type AssistantPayload = { action: AssistantAction; instruction?: string; strength?: "light" | "balanced" | "substantial"; focus?: ("dialogue" | "rhythm" | "repetition" | "specificity")[]; selection?: TextSelection; answer?: string; replacement?: string; analysis?: ChapterAnalysis; appliedContent?: string; appliedChanges?: number[] };
+export type AssistantPayload = { action: AssistantAction; instruction?: string; label?: string; strength?: "light" | "balanced" | "substantial"; focus?: ("dialogue" | "rhythm" | "repetition" | "specificity")[]; selection?: TextSelection; answer?: string; replacement?: string; analysis?: ChapterAnalysis; appliedContent?: string; appliedChanges?: number[] };
 export type AssistantEntry = { id: string; chapterId: string; kind: "result" | "version"; sourceContent: string; payload: AssistantPayload; createdAt: string };
 export const assistantRequestSchema = z.object({
   action: z.enum(ASSISTANT_ACTIONS),
@@ -36,6 +36,7 @@ export const assistantRequestSchema = z.object({
 });
 export type AssistantRequest = z.input<typeof assistantRequestSchema>;
 export const assistantApplySchema = z.object({ entryId: z.string().min(1).max(100), expectedContent: z.string().max(2_000_000), acceptedChanges: z.array(z.number().int().min(0)).max(1000).optional() });
+export const saveChapterVersionSchema = z.object({ expectedContent: z.string().max(2_000_000), label: z.string().trim().max(80).default("") });
 
 /** Match typography/whitespace differences, then return the actual source excerpt. */
 export function resolveEvidenceQuote(quote: string, source: string): string | null {
