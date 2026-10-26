@@ -7,6 +7,7 @@ import { api } from "@/lib/api";
 import { comparePassages, SCORE_CATEGORIES, type AssistantAction, type AssistantEntry, type TextSelection } from "@/lib/chapterAssistant";
 import type { Chapter } from "@/lib/types";
 import { Badge, Button, Select, Textarea } from "@/components/ui";
+import RevisionReview from "@/components/RevisionReview";
 
 const ACTION_LABELS: Record<AssistantAction, string> = { ask: "Ask", rewrite: "Revise", analyze: "Analyze", humanize: "Humanize" };
 const FOCUS_OPTIONS = { dialogue: "Natural dialogue", rhythm: "Sentence rhythm", repetition: "Less repetition", specificity: "Stronger specificity" } as const;
@@ -29,6 +30,7 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<AssistantEntry[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
   type ResultView = { entry: AssistantEntry; action: AssistantAction; accepted: number[]; appliedId: string | null };
   const [view, setView] = useState<{ entry: AssistantEntry; action: AssistantAction } | null>(null);
   const [previousViews, setPreviousViews] = useState<ResultView[]>([]);
@@ -63,6 +65,7 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
   const isEdit = action === "rewrite" || action === "humanize";
 
   function closeResult() {
+    setReviewOpen(false);
     setClosedModes(current => ({ ...current, [action]: true }));
     setView(null);
     setPreviousViews([]);
@@ -85,6 +88,7 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
       setPreviousViews(current => [...current, { entry: selected, action, accepted, appliedId }].slice(-20));
     }
     setView({ entry, action: mode });
+    setReviewOpen(entry.kind === "result" && entry.payload.replacement !== undefined);
     setClosedModes(current => ({ ...current, [mode]: false }));
     setAppliedId(null);
     setHistoryOpen(false);
@@ -140,7 +144,7 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
   }
   const analysis = selected?.payload.analysis;
   const versions = history.filter(entry => entry.kind === "version");
-  return (
+  return (<>
     <aside hidden={!open} aria-label="Chapter assistant" className="w-full shrink-0 border-t border-line bg-surface p-5 lg:w-[320px] lg:border-l lg:border-t-0">
       <div className="mb-3 flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 text-sm font-semibold"><Sparkles className="h-4 w-4 text-accent" />Writing assistant</h2>
@@ -197,13 +201,23 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
         </>}
         {selected.kind === "version" && <><p className="text-xs text-ink-muted">Restoring replaces the whole chapter and saves your current text as another version.</p><Textarea readOnly aria-label="Saved version text" rows={10} value={selected.sourceContent} /><Button size="sm" variant="secondary" loading={applying} disabled={locked || busy || selected.sourceContent === content} onClick={() => apply(selected)}>Restore this version</Button></>}
         {selected.payload.replacement !== undefined && <>
-          <p className="text-xs text-ink-muted">{changes.length ? `${changes.length} changed passage${changes.length === 1 ? "" : "s"}. Choose which to apply.` : "The assistant suggested no changes."} {selected.payload.selection ? "Only the original selection will be replaced." : "Unselected passages stay as written."}</p>
-          {!!changes.length && <div className="flex gap-3 text-xs"><button type="button" className="text-accent hover:underline" onClick={() => setAccepted(changes.map((_, index) => index).filter(index => !appliedChanges.includes(index)))}>Select all</button><button type="button" className="text-accent hover:underline" onClick={() => setAccepted([])}>Clear choices</button></div>}
-          {changes.map((change, index) => <div key={index} className="overflow-hidden rounded-lg border border-line"><label className="flex items-center gap-2 border-b border-line bg-surface px-3 py-2 text-xs font-medium"><input type="checkbox" checked={accepted.includes(index)} disabled={applying || appliedChanges.includes(index)} onChange={() => setAccepted(current => current.includes(index) ? current.filter(value => value !== index) : [...current, index])} />Passage {index + 1}{appliedChanges.includes(index) ? " · applied" : ""}</label><div className="space-y-1 bg-danger/5 p-3"><h4 className="text-[10px] font-medium uppercase text-ink-muted">Original</h4><p className="whitespace-pre-wrap text-xs leading-relaxed">{change.before || "(Insertion)"}</p></div><div className="space-y-1 bg-accent-soft p-3"><h4 className="text-[10px] font-medium uppercase text-ink-muted">Suggested</h4><p className="whitespace-pre-wrap text-xs leading-relaxed">{change.after || "(Remove this passage)"}</p></div></div>)}
-          <div className="flex flex-wrap gap-2"><Button size="sm" loading={applying} disabled={locked || busy || stale || !accepted.length} onClick={() => apply(selected, accepted)}>Apply {accepted.length === changes.length ? "changes" : "selected passages"}</Button><Button size="sm" variant="secondary" disabled={busy || applying || stale || locked} onClick={() => run(selected)}>Try again</Button><Button size="sm" variant="ghost" disabled={applying} onClick={() => discard(selected)}>Discard</Button></div>
+          <p className="text-xs text-ink-muted">{changes.length ? `${changes.length} changed passage${changes.length === 1 ? "" : "s"}.` : "The assistant suggested no text changes."} Review the original and suggested text before applying anything.</p>
+          <Button size="sm" variant="secondary" onClick={() => setReviewOpen(true)}>Review revision</Button>
         </>}
       </section>}
       {!!versions.length && <div className="mt-4 border-t border-line pt-3"><button type="button" disabled={locked || applying || busy} className="text-xs text-accent hover:underline disabled:opacity-40" onClick={() => chooseEntry(versions[0])}>Review last original / Undo</button></div>}
     </aside>
-  );
+    {selected?.kind === "result" && selected.payload.replacement !== undefined && <RevisionReview
+      open={reviewOpen && open} changes={changes} accepted={accepted} applied={appliedChanges}
+      stale={Boolean(stale)} locked={locked} busy={busy} applying={applying}
+      selectionOnly={Boolean(selected.payload.selection)} error={error}
+      onClose={() => setReviewOpen(false)}
+      onToggle={index => setAccepted(current => current.includes(index) ? current.filter(value => value !== index) : [...current, index])}
+      onSelectAll={() => setAccepted(changes.map((_, index) => index).filter(index => !appliedChanges.includes(index)))}
+      onClear={() => setAccepted([])}
+      onApply={() => void apply(selected, accepted)}
+      onRetry={() => { setReviewOpen(false); void run(selected); }}
+      onDiscard={() => void discard(selected)}
+    />}
+  </>);
 }
