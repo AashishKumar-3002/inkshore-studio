@@ -74,6 +74,10 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
     setAppliedId(null);
     setError(null);
   }
+  function closeReview() {
+    setReviewOpen(false);
+    requestAnimationFrame(() => document.querySelector<HTMLElement>("[data-review-trigger]")?.focus());
+  }
   function goBack() {
     const previous = previousViews.at(-1);
     if (!previous) { closeResult(); return; }
@@ -222,7 +226,7 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
         {selected.kind === "version" && <><p className="text-xs text-ink-muted">Restoring replaces the whole chapter and saves your current text as another version.</p><Textarea readOnly aria-label="Saved version text" rows={10} value={selected.sourceContent} /><Button size="sm" variant="secondary" loading={applying} disabled={locked || busy || selected.sourceContent === content} onClick={() => apply(selected)}>Restore this version</Button></>}
         {selected.payload.replacement !== undefined && <>
           <p className="text-xs text-ink-muted">{changes.length ? `${changes.length} changed passage${changes.length === 1 ? "" : "s"}.` : "The assistant suggested no text changes."} Review the original and suggested text before applying anything.</p>
-          <Button size="sm" variant="secondary" onClick={() => setReviewOpen(true)}>Review revision</Button>
+          <Button size="sm" variant="secondary" data-review-trigger onClick={() => setReviewOpen(true)}>Review revision</Button>
         </>}
       </section>}
       {!!versions.length && <div className="mt-4 border-t border-line pt-3"><button type="button" disabled={locked || applying || busy} className="text-xs text-accent hover:underline disabled:opacity-40" onClick={() => chooseEntry(versions[0])}>Review last original / Undo</button></div>}
@@ -231,7 +235,7 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
       open={reviewOpen && open} changes={changes} accepted={accepted} applied={appliedChanges}
       stale={Boolean(stale)} locked={locked} busy={busy} applying={applying}
       selectionOnly={Boolean(selected.payload.selection)} error={error}
-      onClose={() => setReviewOpen(false)}
+      onClose={closeReview}
       onToggle={index => setAccepted(current => current.includes(index) ? current.filter(value => value !== index) : [...current, index])}
       onSelectAll={() => setAccepted(changes.map((_, index) => index).filter(index => !appliedChanges.includes(index)))}
       onClear={() => setAccepted([])}
