@@ -3,10 +3,8 @@
 /*
  * Inkshore Studio — design system.
  *
- * Modern, minimal, dense. Near-neutral greys, a single indigo accent used
- * sparingly, soft 1px borders and low-contrast shadows for depth. Content
- * lives in a centred container — never edge to edge — so no screen has a
- * dead half.
+ * Calm neutral surfaces and a deep green accent for the writing workspace.
+ * Manuscript typography is intentionally distinct from the interface type.
  */
 
 /* Archivo, self-hosted (SIL Open Font License 1.1). A neutral grotesk used
@@ -49,32 +47,31 @@
   color-scheme: light;
 
   /* Ground: a hair off pure white so cards can be white and still read. */
-  --paper: #fbfbfc;
+  --paper: #f4f4f1;
   --surface: #ffffff;
-  --surface-2: #f4f4f6;
-  --surface-3: #e9e9ee;
+  --surface-2: #e9f1ed;
+  --surface-3: #dce9e2;
 
-  --ink: #17171a;
-  --ink-muted: #6b6b76;
-  --ink-subtle: #9a9aa5;
+  --ink: #202729;
+  --ink-muted: #6d7878;
+  --ink-subtle: #87928f;
 
   /* Borders are quiet — depth comes from shadow, not from heavy rules. */
-  --line: #e7e7ec;
-  --hair: #efeff3;
-  --line-strong: #d6d6de;
+  --line: #dfe4e1;
+  --hair: #e9ece8;
+  --line-strong: #c6d1ca;
 
-  /* One accent, used for links, focus and selected state. Primary buttons
-     are near-black: it keeps the accent rare enough to still mean something. */
-  --accent: #5551ea;
-  --accent-hover: #4340d4;
-  --accent-active: #3a37bb;
+  /* One accent for links, focus, selected state, and primary actions. */
+  --accent: #285d50;
+  --accent-hover: #204d42;
+  --accent-active: #193d34;
   --accent-ink: #ffffff;
-  --accent-soft: #eeeefe;
-  --accent-border: #d6d5fb;
+  --accent-soft: #e9f1ed;
+  --accent-border: #c6ded0;
 
-  /* Solid action colour (buttons, avatar) — the product's "ink" gesture. */
-  --solid: #17171a;
-  --solid-hover: #2c2c33;
+  /* Solid action colour for buttons and the user avatar. */
+  --solid: #285d50;
+  --solid-hover: #204d42;
   --solid-ink: #ffffff;
 
   --success: #067a55;
@@ -97,30 +94,30 @@
 .dark {
   color-scheme: dark;
 
-  --paper: #0b0b0e;
-  --surface: #131317;
-  --surface-2: #1a1a20;
-  --surface-3: #24242c;
+  --paper: #15191b;
+  --surface: #1e2426;
+  --surface-2: #23332f;
+  --surface-3: #2c4239;
 
-  --ink: #f4f4f6;
-  --ink-muted: #a0a0ad;
-  --ink-subtle: #6e6e7b;
+  --ink: #edf1f0;
+  --ink-muted: #a2aeac;
+  --ink-subtle: #788985;
 
-  --line: #26262e;
-  --hair: #1e1e25;
-  --line-strong: #35353f;
+  --line: #394244;
+  --hair: #2a3435;
+  --line-strong: #516061;
 
-  --accent: #8b88ff;
-  --accent-hover: #a3a1ff;
-  --accent-active: #b9b7ff;
-  --accent-ink: #12121a;
-  --accent-soft: #1c1b33;
-  --accent-border: #302e5c;
+  --accent: #9ecdb8;
+  --accent-hover: #b7ddc9;
+  --accent-active: #d1ebda;
+  --accent-ink: #17231d;
+  --accent-soft: #23332f;
+  --accent-border: #3b5a49;
 
-  /* Inverted on dark: the solid gesture becomes light-on-dark. */
-  --solid: #f4f4f6;
-  --solid-hover: #dcdce2;
-  --solid-ink: #131317;
+  /* A lighter green action on dark surfaces. */
+  --solid: #9ecdb8;
+  --solid-hover: #b7ddc9;
+  --solid-ink: #17231d;
 
   --success: #3ecf9a;
   --success-soft: #10261f;
@@ -183,6 +180,7 @@
     sans-serif;
   --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-manuscript: Georgia, "Times New Roman", serif;
 
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -349,9 +347,10 @@
 
   /* Manuscript prose — the one deliberately narrow measure. */
   .prose-manuscript {
-    font-size: 16px;
-    line-height: 1.75;
-    max-width: 66ch;
+    font-family: var(--font-manuscript);
+    font-size: 17px;
+    line-height: 1.8;
+    max-width: 68ch;
     color: var(--ink);
   }
   .prose-manuscript p {

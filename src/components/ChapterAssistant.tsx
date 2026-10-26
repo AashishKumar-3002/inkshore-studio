@@ -141,9 +141,9 @@ export default function ChapterAssistant({ projectId, chapterId, open, action, o
   const analysis = selected?.payload.analysis;
   const versions = history.filter(entry => entry.kind === "version");
   return (
-    <aside hidden={!open} aria-label="Chapter assistant" className="border-t border-line bg-surface-2/40 p-4 lg:w-[360px] lg:shrink-0 lg:border-l lg:border-t-0">
+    <aside hidden={!open} aria-label="Chapter assistant" className="w-full shrink-0 border-t border-line bg-surface p-5 lg:w-[320px] lg:border-l lg:border-t-0">
       <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 className="flex items-center gap-2 text-sm font-semibold"><Sparkles className="h-4 w-4 text-accent" />Chapter assistant</h2>
+        <h2 className="flex items-center gap-2 text-sm font-semibold"><Sparkles className="h-4 w-4 text-accent" />Writing assistant</h2>
         <div className="flex gap-1">
           <Button variant="ghost" size="icon" aria-label="Assistant history" aria-expanded={historyOpen} onClick={() => setHistoryOpen(value => !value)}><History className="h-4 w-4" /></Button>
           <Button variant="ghost" size="icon" aria-label="Close chapter assistant" onClick={onClose}><X className="h-4 w-4" /></Button>

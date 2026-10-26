@@ -1,9 +1,8 @@
 /**
  * Inkshore Studio's UI kit.
  *
- * Minimal and dense: quiet 1px borders, soft shadows for depth, 8–12px
- * radii, and a near-black primary action so the indigo accent stays rare
- * enough to mean something.
+ * Quiet borders and soft depth keep the manuscript visually dominant.
+ * Primary actions share the studio's green accent.
  */
 "use client";
 
