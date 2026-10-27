@@ -139,10 +139,13 @@ export default function SettingsPage() {
   const visionModels = provider.models.filter((m) => m.vision).map((m) => m.label);
 
   return (
-    <div className="container-app py-8">
+    <div className="container-app py-8 md:py-12">
       <PageHeader
-        kicker="Per project · keys never leave your workspace"
+        kicker="Make this space yours"
         title="Settings"
+        size={44}
+        className="gap-6 [&_.disp]:font-[family-name:var(--font-manuscript)] [&_.disp]:font-normal"
+        description="Choose how Inkshore helps you write, then manage your project and its exports."
         actions={
           <span className="text-xs text-ink-subtle" aria-live="polite">
             {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : ""}
@@ -150,11 +153,12 @@ export default function SettingsPage() {
         }
       />
 
-      <div className="mt-7 flex flex-col gap-6">
+      <div className="mt-9 flex flex-col gap-6">
         <Card>
           <CardHeader
             title="Text generation"
             description="Provider, model, and the key used to draft your chapters."
+            className="px-5 py-5 [&_h2]:font-[family-name:var(--font-manuscript)] [&_h2]:text-xl [&_h2]:font-normal"
           />
           <div className="grid gap-x-5 gap-y-4 p-5 sm:grid-cols-2">
             <Field label="Provider" htmlFor="ai-provider">

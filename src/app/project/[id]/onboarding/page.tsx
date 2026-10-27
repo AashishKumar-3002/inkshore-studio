@@ -121,17 +121,17 @@ export default function OnboardingPage() {
   const meta = SECTION_META[current.section];
 
   return (
-    <div className="container-narrow py-8">
-      <span className="block text-xs text-ink-muted" aria-live="polite">
+    <div className="container-narrow py-8 md:py-14">
+      <span className="block text-xs font-medium uppercase tracking-[0.12em] text-accent" aria-live="polite">
         Setting up &ldquo;{projectName}&rdquo; — Section {step + 1} of {totalSteps}
       </span>
-      <Ticks value={progress} className="mt-2.5" />
-      <Display size={26} className="mt-4">
+      <Ticks value={progress} className="mt-4" />
+      <Display size={40} className="mt-8 font-[family-name:var(--font-manuscript)] font-normal">
         {meta.label}
       </Display>
-      <p className="mt-1.5 max-w-[52ch] text-[13px] text-ink-muted">{meta.blurb}</p>
+      <p className="mt-3 max-w-[52ch] text-sm leading-6 text-ink-muted">{meta.blurb}</p>
 
-      <Card className="mt-6 p-5 sm:p-6">
+      <Card className="mt-8 p-5 sm:p-8">
         <div className="divide-y divide-hair">
           {current.questions.map((q) => (
             <div key={q.id} className="py-4 first:pt-0 last:pb-0">
