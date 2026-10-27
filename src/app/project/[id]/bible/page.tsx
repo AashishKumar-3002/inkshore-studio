@@ -153,21 +153,20 @@ export default function BiblePage() {
     {} as Record<SectionId, number>
   );
   const totalMissing = Object.values(missingBySection).reduce((a, b) => a + b, 0);
+  const totalEssential = ONBOARDING_QUESTIONS.length;
+  const answeredEssential = totalEssential - totalMissing;
 
   return (
-    <div className="container-app py-8">
+    <div className="container-app py-8 md:py-12">
       <PageHeader
-        title="Story Bible"
+        kicker="The world behind the words"
+        title="Story bible"
+        size={44}
+        className="gap-6 [&_.disp]:font-[family-name:var(--font-manuscript)] [&_.disp]:font-normal"
         description={
           <>
-            Everything here is used as context whenever a chapter is generated. Edit
-            anytime — nothing is locked in.
-            {totalMissing > 0 && (
-              <span className="ml-1 text-danger">
-                {totalMissing} essential question{totalMissing === 1 ? "" : "s"} still
-                unanswered.
-              </span>
-            )}
+            Keep the people, places, and promises of your story close. You can change
+            these notes at any time; they guide chapter generation when you use it.
           </>
         }
         actions={
@@ -197,6 +196,20 @@ export default function BiblePage() {
           </>
         }
       />
+      <div className="mt-8 flex flex-col gap-4 rounded-xl border border-line bg-surface p-5 shadow-card sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div>
+          <p className="lbl">Story foundation</p>
+          <p className="mt-2 font-[family-name:var(--font-manuscript)] text-[23px] leading-tight text-ink">
+            {totalMissing === 0 ? "Your essentials are in place." : `${answeredEssential} of ${totalEssential} essentials answered`}
+          </p>
+          <p className="mt-1 text-xs text-ink-muted">Move through the sections below at your own pace.</p>
+        </div>
+        <div className="w-full sm:w-40" aria-label={`${answeredEssential} of ${totalEssential} essentials answered`}>
+          <div className="h-2 overflow-hidden rounded-full bg-surface-3">
+            <div className="h-full rounded-full bg-accent transition-[width]" style={{ width: `${totalEssential ? answeredEssential / totalEssential * 100 : 100}%` }} />
+          </div>
+        </div>
+      </div>
       <input
         ref={fileInputRef}
         type="file"
@@ -240,7 +253,7 @@ export default function BiblePage() {
       )}
 
       <fieldset disabled={importing} className="min-w-0">
-      <Panel className="mt-6">
+      <Panel className="mt-8 overflow-hidden">
         {SECTION_IDS.map((sectionId) => {
           const meta = SECTION_META[sectionId];
           const essentials = ONBOARDING_QUESTIONS.filter((q) => q.section === sectionId);
@@ -256,12 +269,12 @@ export default function BiblePage() {
             <div key={sectionId}>
               <button
                 onClick={() => setOpenSection(isOpen ? null : sectionId)}
-                className="flex w-full items-center justify-between gap-3 border-b border-hair px-4 py-3 text-left transition-colors hover:bg-surface-2/60"
+                className="flex w-full items-center justify-between gap-3 border-b border-hair px-5 py-4 text-left transition-colors hover:bg-surface-2/60 sm:px-6"
                 aria-expanded={isOpen}
                 aria-controls={panelId}
               >
                 <div className="flex min-w-0 flex-wrap items-center gap-2">
-                  <span className="truncate text-[13px] font-medium text-ink">
+                  <span className="truncate font-[family-name:var(--font-manuscript)] text-lg text-ink">
                     {meta.label}
                   </span>
                   <span className="tnum text-xs text-ink-muted">
@@ -278,7 +291,7 @@ export default function BiblePage() {
               </button>
 
               {isOpen && (
-                <div id={panelId} className="space-y-6 bg-surface-2/40 p-4">
+                <div id={panelId} className="space-y-6 bg-surface-2/40 p-5 sm:p-6">
                   <p className="-mt-2 text-xs text-ink-subtle">{meta.blurb}</p>
                   {essentials.map((q) => (
                     <QuestionCard
