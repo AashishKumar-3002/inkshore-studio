@@ -5,18 +5,18 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ),
-  title: "Your next draft starts here",
+  title: "A quieter place to write your story",
   description:
-    "A local-first writing studio for your world, chapters, and voice. Revise with AI, review every change, and export your manuscript. No account needed on desktop.",
+    "Plan your world, write your chapters, and review every revision in one calm writing studio. Use Inkshore on the web or keep a local desktop library.",
   openGraph: {
-    title: "Inkshore Studio — Your next draft starts here",
-    description: "Your story. Your voice. A little help with the next draft.",
+    title: "Inkshore Studio — A quieter place to write your story",
+    description: "Plan, write, and revise in one calm studio.",
     images: [
       {
-        url: "/screenshots/chapter-assistant-light.png",
+        url: "/screenshots/studio-writing-workspace.png",
         width: 1280,
-        height: 960,
-        alt: "Inkshore Studio chapter editor and assistant",
+        height: 720,
+        alt: "Inkshore Studio chapter writing workspace",
       },
     ],
   },
