@@ -30,14 +30,14 @@ import {
   cn,
 } from "@/components/ui";
 
-const NOTE_COLORS = ["#FEF3C7", "#DBEAFE", "#DCFCE7", "#FCE7F3", "#E5E7EB"];
+const NOTE_COLORS = ["#F5E9C9", "#DDEAE4", "#E7E5D7", "#EEDDD3", "#E5E7EB"];
 /** Near-black — sticky notes keep a fixed pastel background in both themes,
  * so their text needs a fixed dark ink rather than a token that would flip
  * to a light color (and vanish) in dark mode. */
 const NOTE_TEXT_COLOR = "#1f2937";
-/** A mid-blue reads on both the light and dark board backgrounds; a pure
+/** A deep green reads on both the light and dark board backgrounds; a pure
  * black default pen would disappear against the dark-mode board. */
-const DEFAULT_PEN_COLOR = "#2563eb";
+const DEFAULT_PEN_COLOR = "#3b806d";
 
 const MAX_NOTES = 500;
 const MAX_NOTE_TEXT = 5000;
@@ -328,11 +328,13 @@ export default function StoryboardPage() {
   }
 
   return (
-    <div className="container-app flex flex-col overflow-x-hidden py-8">
+    <div className="container-app flex flex-col overflow-x-hidden py-8 md:py-12">
       <PageHeader
-        kicker={`${notes.length} note${notes.length === 1 ? "" : "s"} · ${strokes.length} stroke${strokes.length === 1 ? "" : "s"}`}
+        kicker="A place to think out loud"
         title="Storyboard"
-        description="Scribble ideas, drag sticky notes around, and ask the agent what it thinks."
+        size={44}
+        className="gap-6 [&_.disp]:font-[family-name:var(--font-manuscript)] [&_.disp]:font-normal"
+        description="Map scenes, move ideas around, and find the shape of your story before it reaches the page."
         actions={
           <>
             <span className="text-xs text-ink-subtle" aria-live="polite">
@@ -371,6 +373,9 @@ export default function StoryboardPage() {
           </>
         }
       />
+      <p className="mt-5 text-xs text-ink-muted" aria-live="polite">
+        {notes.length} note{notes.length === 1 ? "" : "s"} · {strokes.length} stroke{strokes.length === 1 ? "" : "s"} on this board
+      </p>
 
       {mode === "draw" && (
         <div className="mt-4 flex flex-wrap items-center gap-2">

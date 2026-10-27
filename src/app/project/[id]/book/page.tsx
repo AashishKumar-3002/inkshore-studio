@@ -146,17 +146,22 @@ export default function BookPage() {
   const estimatedPages = Math.max(1, Math.round(totalWords / 250));
 
   return (
-    <div className="container-app py-8">
+    <div className="container-app py-8 md:py-12">
       <PageHeader
-        kicker={book.title || project.name}
-        title="Book & Cover"
-        description={`${project.chapters.length} chapter${project.chapters.length === 1 ? "" : "s"} · ${totalWords.toLocaleString()} words · ${finalCount} marked final`}
+        kicker="Bring the pages together"
+        title="Book & cover"
+        size={44}
+        className="gap-6 [&_.disp]:font-[family-name:var(--font-manuscript)] [&_.disp]:font-normal"
+        description="Set the details readers will see, prepare a cover, and take your manuscript with you."
         actions={
           <span className="text-xs text-ink-subtle" aria-live="polite">
             {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : ""}
           </span>
         }
       />
+      <p className="mt-5 text-xs text-ink-muted">
+        {project.chapters.length} chapter{project.chapters.length === 1 ? "" : "s"} · {totalWords.toLocaleString()} words · {finalCount} marked final
+      </p>
 
       <div className="mt-7 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-8">
         {/* ---------------------------------------------------------- */}
@@ -376,11 +381,13 @@ export default function BookPage() {
               className="aspect-[2/3] w-full rounded-xl border border-line object-cover shadow-card"
             />
           ) : (
-            <div
-              className="hatch flex aspect-[2/3] w-full items-center justify-center overflow-hidden rounded-xl border border-line shadow-card"
-              aria-hidden
-            >
-              <span className="text-xs text-ink-subtle">No cover yet</span>
+            <div className="flex aspect-[2/3] w-full flex-col justify-between overflow-hidden rounded-xl border border-[#315f50] bg-[#214f43] p-8 text-[#f5f5ed] shadow-card" aria-label="Typographic preview until a cover is added">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#b7d8c5]">A work in progress</span>
+              <div>
+                <p className="font-[family-name:var(--font-manuscript)] text-[clamp(32px,3vw,46px)] leading-[1.05]">{book.title || project.name}</p>
+                {book.subtitle && <p className="mt-3 text-sm text-[#d8e6dc]">{book.subtitle}</p>}
+              </div>
+              <span className="border-t border-white/30 pt-5 text-xs tracking-[0.08em] text-[#d8e6dc]">{book.author || "Your name"}</span>
             </div>
           )}
 
