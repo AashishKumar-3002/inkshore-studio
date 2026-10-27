@@ -8,7 +8,6 @@ import {
   ArrowUpRight,
   BookOpen,
   Check,
-  ChevronDown,
   Code2,
   FileText,
   HardDrive,
@@ -130,10 +129,10 @@ export default function LandingSite({
             data-open={menuOpen}
           >
             <a href="#workspace" onClick={closeMenu}>
-              The workspace
+              Studio
             </a>
             <a href="#your-ai" onClick={closeMenu}>
-              Your AI
+              How it works
             </a>
             <a href="#questions" onClick={closeMenu}>
               FAQs
@@ -141,11 +140,11 @@ export default function LandingSite({
             <a href={REPO} target="_blank" rel="noreferrer">
               GitHub <ArrowUpRight size={12} className="inline" />
             </a>
-            <a href="/register" onClick={closeMenu} className={styles.navCta}>
-              Try on web <ArrowRight size={15} />
+            <a href="/login" onClick={closeMenu}>
+              Sign in
             </a>
-            <a href="#download" onClick={closeMenu} className={styles.navCta}>
-              Download <ArrowDownToLine size={15} />
+            <a href="/register" onClick={closeMenu} className={styles.navCta}>
+              Start writing <ArrowRight size={15} />
             </a>
           </div>
         </nav>
@@ -158,39 +157,34 @@ export default function LandingSite({
         >
           <div className={styles.reveal}>
             <div className={styles.eyebrow}>
-              <span className={styles.dot} />A home for the story only you can
-              tell
+              <span className={styles.dot} />A writing space that feels like yours
             </div>
             <h1 id="hero-heading">
-              Big ideas.
+              Make room
               <br />
-              Meet your <em>next draft.</em>
+              for the <em>story.</em>
             </h1>
             <p>
-              Your world, your chapters, your voice. A writing studio with AI
-              when you want it—and the final say, always yours.
+              Plan your world, write your chapters, and shape every revision in
+              one calm place. Your words stay yours, with AI there when you ask.
             </p>
             <div className={styles.actions}>
               <a className={styles.primary} href="/register">
-                Try on web <ArrowRight size={18} />
+                Start writing <ArrowRight size={18} />
               </a>
               <a className={styles.secondary} href="#download">
-                Download desktop <ArrowDownToLine size={17} />
+                Explore desktop <ArrowDownToLine size={17} />
               </a>
             </div>
             <p className={styles.small}>
-              Try in your browser <span>·</span> Local-first desktop <span>·</span>{" "}
+              Write in your browser <span>·</span> Keep a local desktop library <span>·</span>{" "}
               Open source
             </p>
           </div>
           <div className={styles.previewArea} id="workspace">
-            <div className={styles.previewNote}>
-              A little help. A lot of you.
-              <ChevronDown size={32} strokeWidth={1.3} />
-            </div>
             <div className={styles.previewTop}>
               <span className={styles.previewLabel}>
-                <Monitor size={14} /> Your new writing space
+                <Monitor size={14} /> Inside the Studio
               </span>
               <div className={styles.themeSwitch} aria-label="Screenshot theme">
                 <button aria-pressed={!light} onClick={() => setLight(false)}>
@@ -205,23 +199,23 @@ export default function LandingSite({
               <Image
                 src={
                   light
-                    ? "/screenshots/chapter-assistant-light.png"
-                    : "/screenshots/chapter-assistant.png"
+                    ? "/screenshots/studio-writing-workspace.png"
+                    : "/screenshots/studio-writing-workspace-dark.png"
                 }
-                alt={`Inkshore Studio's chapter editor and revision assistant in ${light ? "light" : "dark"} mode, with a sample story called The Last Lighthouse`}
-                width={1600}
-                height={1100}
+                alt={`Inkshore Studio chapter editor in ${light ? "light" : "dark"} mode, with a sample story called The Last Lighthouse`}
+                width={1280}
+                height={720}
                 sizes="(max-width: 1240px) 94vw, 1168px"
-                loading="eager"
+                priority
               />
             </div>
           </div>
           <div className={styles.benefits}>
             <span>
-              <HardDrive /> Your library, on your computer
+              <HardDrive /> Local desktop library
             </span>
             <span>
-              <Check /> Review every AI revision
+              <Check /> Review before you apply
             </span>
             <span>
               <FileText /> Export your manuscript
@@ -271,7 +265,7 @@ export default function LandingSite({
                     <strong>
                       Keep what works. Revisit what doesn&rsquo;t.
                     </strong>
-                    <p>Review revisions and return to saved originals.</p>
+                    <p>Choose individual changes and save named versions.</p>
                   </div>
                 </li>
               </ul>
@@ -451,29 +445,37 @@ export default function LandingSite({
               <a href={downloads.macArm ?? releaseLink}>
                 {downloads.macArm
                   ? "Download for Apple Silicon"
-                  : "View macOS releases"}
+                  : "Check macOS downloads"}
                 <ArrowDownToLine size={16} />
               </a>
-              <span className={styles.downloadSoon}>Intel Mac · Coming soon</span>
+              <a href={downloads.macIntel ?? releaseLink}>
+                {downloads.macIntel ? "Download for Intel Mac" : "Check Intel downloads"}
+                <ArrowDownToLine size={16} />
+              </a>
               <small>
-                {downloads.macArm
-                  ? downloads.version
-                  : "Apple Silicon preview is awaiting publication"}
+                {downloads.version ?? "See published releases for availability"}
               </small>
             </article>
             <article className={styles.downloadCard}>
               <PlatformIcon platform="windows" />
               <h3>Windows</h3>
               <p>x64 · EXE installer</p>
-              <span className={styles.downloadSoon}>Coming soon</span>
-              <small>Windows preview is in preparation</small>
+              <a href={downloads.windows ?? releaseLink}>
+                {downloads.windows ? "Download for Windows" : "Check Windows downloads"}
+                <ArrowDownToLine size={16} />
+              </a>
+              <small>{downloads.version ?? "See published releases for availability"}</small>
             </article>
             <article className={styles.downloadCard}>
               <PlatformIcon platform="linux" />
               <h3>Linux</h3>
               <p>x64 · AppImage & Debian</p>
-              <span className={styles.downloadSoon}>Coming soon</span>
-              <small>Linux preview is in preparation</small>
+              <a href={downloads.appImage ?? releaseLink}>
+                {downloads.appImage ? "Download AppImage" : "Check Linux downloads"}
+                <ArrowDownToLine size={16} />
+              </a>
+              {downloads.deb && <a href={downloads.deb}>Download Debian package <ArrowDownToLine size={16} /></a>}
+              <small>{downloads.version ?? "See published releases for availability"}</small>
             </article>
           </div>
           <p className={styles.downloadNotes}>
@@ -485,7 +487,7 @@ export default function LandingSite({
             yet.
             <br />
             <a
-              href={`${REPO}/blob/feat/desktop-releases/README.md#running-from-source`}
+              href={`${REPO}/blob/main/README.md#running-from-source`}
             >
               Prefer running from source?
             </a>{" "}
@@ -549,7 +551,7 @@ export default function LandingSite({
             <a href={REPO}>Source code</a>
             <a href={`${REPO}/issues`}>Feedback & issues</a>
             <a href="/register">Try on web</a>
-            <a href={`${REPO}/blob/feat/desktop-releases/LICENSE`}>
+            <a href={`${REPO}/blob/main/LICENSE`}>
               MIT License
             </a>
           </div>
