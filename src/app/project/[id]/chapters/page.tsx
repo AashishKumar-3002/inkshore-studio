@@ -241,6 +241,7 @@ export default function ChaptersPage() {
 
   const totalWords = chapters.reduce((sum, c) => sum + c.wordCount, 0);
   const lockedCount = chapters.filter((c) => c.locked).length;
+  const finishedCount = chapters.filter((c) => c.status === "final").length;
 
   const viewToggle = (
     <Segmented
@@ -277,10 +278,13 @@ export default function ChaptersPage() {
     "grid h-7 w-7 shrink-0 place-items-center rounded-md text-ink-subtle opacity-0 transition-all hover:bg-danger-soft hover:text-danger focus-visible:opacity-100 group-hover:opacity-100";
 
   return (
-    <div className="container-app py-8">
+    <div className="container-app py-8 md:py-12">
       <PageHeader
+        kicker="The manuscript"
         title="Chapters"
-        description={`${chapters.length} chapter${chapters.length === 1 ? "" : "s"} · ${totalWords.toLocaleString()} words · ${lockedCount} locked`}
+        size={44}
+        className="gap-6 [&_.disp]:font-[family-name:var(--font-manuscript)] [&_.disp]:font-normal"
+        description="Every scene, draft, and finished chapter in one place. Pick up wherever the story left you."
         actions={
           <>
             {viewToggle}
@@ -306,6 +310,23 @@ export default function ChaptersPage() {
           </>
         }
       />
+
+      {!loading && !loadError && chapters.length > 0 && (
+        <div className="mt-8 grid grid-cols-3 overflow-hidden rounded-xl border border-line bg-surface shadow-card" aria-label="Manuscript progress">
+          <div className="border-r border-line px-4 py-4 sm:px-6">
+            <p className="lbl">Chapters</p>
+            <p className="mt-2 font-[family-name:var(--font-manuscript)] text-3xl text-ink">{chapters.length}</p>
+          </div>
+          <div className="border-r border-line px-4 py-4 sm:px-6">
+            <p className="lbl">Words written</p>
+            <p className="tnum mt-2 font-[family-name:var(--font-manuscript)] text-3xl text-ink">{totalWords.toLocaleString()}</p>
+          </div>
+          <div className="px-4 py-4 sm:px-6">
+            <p className="lbl">Final chapters</p>
+            <p className="mt-2 font-[family-name:var(--font-manuscript)] text-3xl text-ink">{finishedCount}<span className="ml-2 font-sans text-xs text-ink-muted">{lockedCount} locked</span></p>
+          </div>
+        </div>
+      )}
 
       {showUpload && pending.length > 0 && (
         <Card className="mt-6 p-4">
