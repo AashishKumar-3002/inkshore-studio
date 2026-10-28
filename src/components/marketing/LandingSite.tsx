@@ -170,7 +170,7 @@ export default function LandingSite({
                 alt={`Inkshore Studio chapter editor in ${light ? "light" : "dark"} mode, with a sample story called The Last Lighthouse`}
                 width={1280}
                 height={720}
-                sizes="(max-width: 700px) calc(100vw - 40px), 680px"
+                sizes="(max-width: 700px) calc(100vw - 40px), (max-width: 1000px) calc(100vw - 64px), 680px"
                 priority
               />
             </div>

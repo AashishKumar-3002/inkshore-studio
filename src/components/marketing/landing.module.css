@@ -104,20 +104,22 @@
   padding: 8px;
 }
 .hero {
+  min-height: 720px;
   padding-top: 24px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  grid-template-rows: 1fr auto;
+  gap: 0 48px;
   align-items: center;
 }
 .reveal {
-  width: min(100%, 680px);
-  padding-bottom: 24px;
+  min-width: 0;
 }
 .hero h1 {
-  max-width: 830px;
+  max-width: 500px;
   margin: 0;
   color: var(--landing-ink);
-  font: 400 clamp(58px, 5vw, 68px)/.98 var(--landing-serif);
+  font: 400 clamp(62px, 5.3vw, 76px)/.98 var(--landing-serif);
   letter-spacing: -.06em;
   overflow-wrap: break-word;
   text-wrap: balance;
@@ -155,7 +157,7 @@
   background: var(--landing-green-soft);
 }
 .previewArea {
-  width: min(100%, 680px);
+  width: 100%;
   min-width: 0;
 }
 .previewTop {
@@ -202,7 +204,8 @@
   height: auto;
 }
 .benefits {
-  width: min(100%, 680px);
+  grid-column: 1 / -1;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -667,12 +670,17 @@
   font-size: 12px;
 }
 @media (max-width:1000px) {
-  .hero,.reveal {
-    grid-template-columns: minmax(0,1fr) minmax(0,350px);
-    column-gap: 24px;
+  .hero {
+    min-height: 0;
+    grid-template-columns: minmax(0,1fr);
+    gap: 32px;
+  }
+  .reveal {
+    max-width: 720px;
   }
   .hero h1 {
-    font-size: clamp(58px,7vw,88px);
+    max-width: 720px;
+    font-size: clamp(58px,7vw,76px);
   }
   .navLinks {
     gap: 16px;
@@ -727,9 +735,6 @@
   .reveal {
     display: block;
     padding-bottom: 32px;
-  }
-  .reveal .sectionLabel {
-    margin-bottom: 16px;
   }
   .hero h1 {
     font-size: clamp(55px,13.7vw,75px);
