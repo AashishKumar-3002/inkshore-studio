@@ -1,0 +1,16 @@
+:root {
+  --landing-paper: #f5f3ed;
+  --landing-white: #fffefa;
+  --landing-ink: #1e2925;
+  --landing-muted: #5d6a62;
+  --landing-green: #214f42;
+  --landing-green-deep: #17392f;
+  --landing-green-soft: #e5ede6;
+  --landing-line: #cbd4ca;
+  --landing-line-dark: #638173;
+  --landing-brass: #b6a277;
+  --landing-highlight: #dfe9db;
+  --landing-shadow: rgb(25 44 34 / 0.16);
+  --landing-sans: "Archivo", Arial, sans-serif;
+  --landing-serif: Georgia, "Times New Roman", serif;
+}

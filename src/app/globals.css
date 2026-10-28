@@ -1,4 +1,10 @@
 @import "tailwindcss";
+@import "../components/marketing/landing.tokens.css";
+
+html,
+body {
+  overflow-x: clip;
+}
 
 /*
  * Inkshore Studio — design system.

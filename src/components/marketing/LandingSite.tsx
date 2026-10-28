@@ -61,34 +61,6 @@ const questions = [
   ],
 ];
 
-function PlatformIcon({ platform }: { platform: "mac" | "windows" | "linux" }) {
-  if (platform === "windows")
-    return (
-      <svg
-        width="35"
-        height="35"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d="M2 4.2 10.4 3v8.1H2zm9.4-1.4L22 1.3v9.8H11.4zM2 12.1h8.4v8.1L2 19zm9.4 0H22v9.8l-10.6-1.5z" />
-      </svg>
-    );
-  if (platform === "mac")
-    return (
-      <svg
-        width="35"
-        height="35"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d="M16.5 12.9c0-2.2 1.8-3.3 1.9-3.4-1-1.4-2.5-1.6-3.1-1.6-1.3-.2-2.6.8-3.3.8-.7 0-1.8-.8-2.9-.8-1.5 0-2.9.9-3.7 2.2-1.6 2.7-.4 6.8 1.2 9 .8 1.1 1.7 2.3 2.9 2.2 1.2-.1 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.2.9-1.3 1.3-2.6 1.3-2.7-.1 0-3.1-1.2-3.1-3.5ZM14.3 6.5c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.8 1.4-.6.7-1.2 1.8-1.1 2.9 1.1.1 2.2-.5 2.9-1.3Z" />
-      </svg>
-    );
-  return <Monitor width={35} height={35} aria-hidden="true" />;
-}
-
 export default function LandingSite({
   downloads,
 }: {
@@ -96,6 +68,7 @@ export default function LandingSite({
 }) {
   const [light, setLight] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openQuestions, setOpenQuestions] = useState<string[]>([]);
   const releaseLink = `${REPO}/releases`;
   const hasDownloads = Boolean(
     downloads.macArm ||
@@ -156,17 +129,13 @@ export default function LandingSite({
           aria-labelledby="hero-heading"
         >
           <div className={styles.reveal}>
-            <div className={styles.eyebrow}>
-              <span className={styles.dot} />A writing space that feels like yours
-            </div>
             <h1 id="hero-heading">
               Make room
               <br />
-              for the <em>story.</em>
+              for the story.
             </h1>
             <p>
-              Plan your world, write your chapters, and shape every revision in
-              one calm place. Your words stay yours, with AI there when you ask.
+              Plan, write, and revise your story in one place. AI is optional.
             </p>
             <div className={styles.actions}>
               <a className={styles.primary} href="/register">
@@ -176,10 +145,6 @@ export default function LandingSite({
                 Explore desktop <ArrowDownToLine size={17} />
               </a>
             </div>
-            <p className={styles.small}>
-              Write in your browser <span>·</span> Keep a local desktop library <span>·</span>{" "}
-              Open source
-            </p>
           </div>
           <div className={styles.previewArea} id="workspace">
             <div className={styles.previewTop}>
@@ -205,12 +170,12 @@ export default function LandingSite({
                 alt={`Inkshore Studio chapter editor in ${light ? "light" : "dark"} mode, with a sample story called The Last Lighthouse`}
                 width={1280}
                 height={720}
-                sizes="(max-width: 1240px) 94vw, 1168px"
+                sizes="(max-width: 700px) calc(100vw - 40px), 680px"
                 priority
               />
             </div>
           </div>
-          <div className={styles.benefits}>
+          <div className={styles.benefits} aria-label="Studio highlights">
             <span>
               <HardDrive /> Local desktop library
             </span>
@@ -238,15 +203,14 @@ export default function LandingSite({
                 Let&rsquo;s make it sing.
               </h2>
               <p className={styles.sectionIntro}>
-                You know when something feels off. Select the passage, say what
-                you need, and work toward a version that feels like you.
+                Select a passage. Ask for a revision that still sounds like you.
               </p>
               <ul className={styles.featureList}>
                 <li>
                   <Sparkles />
                   <div>
                     <strong>Ask, revise, or humanize</strong>
-                    <p>Work on a passage or the whole chapter.</p>
+                    <p>Select a passage or chapter.</p>
                   </div>
                 </li>
                 <li>
@@ -254,8 +218,7 @@ export default function LandingSite({
                   <div>
                     <strong>Feedback you can work with</strong>
                     <p>
-                      Five editorial scores, evidence, and priority
-                      improvements.
+                      Five scores, evidence, and priorities.
                     </p>
                   </div>
                 </li>
@@ -265,7 +228,7 @@ export default function LandingSite({
                     <strong>
                       Keep what works. Revisit what doesn&rsquo;t.
                     </strong>
-                    <p>Choose individual changes and save named versions.</p>
+                    <p>Review changes and save versions.</p>
                   </div>
                 </li>
               </ul>
@@ -281,16 +244,11 @@ export default function LandingSite({
               <div className={styles.passage}>
                 The lighthouse had been dark for seventeen years.{" "}
                 <mark>Tonight, it blinked three times.</mark>
-                <br />
-                <br />
-                Mara stopped halfway down the pier, her suitcase knocking
-                against her knee.
               </div>
               <div className={styles.askBubble}>
                 <Sparkles size={19} />
                 <span>
-                  Build the tension here. Keep the mystery, and let the details
-                  do the work.
+                  Build tension. Keep the mystery in the details.
                 </span>
               </div>
               <div className={styles.passageFooter}>
@@ -304,9 +262,6 @@ export default function LandingSite({
           className={`${styles.section} ${styles.wrap}`}
           aria-labelledby="book-heading"
         >
-          <p className={styles.sectionLabel}>
-            From the first spark to the last page
-          </p>
           <div className={styles.gridHead}>
             <h2 id="book-heading">
               A whole world.
@@ -314,16 +269,15 @@ export default function LandingSite({
               One place to write it.
             </h2>
             <p>
-              Less jumping between scattered notes and drafts. More time with
-              the story you came here to tell.
+              Keep drafts and world notes together.
             </p>
           </div>
           <div className={styles.featureGrid}>
             <article className={styles.worldCard}>
               <h3>Keep your world close.</h3>
               <p>
-                Build a story bible for your characters, setting, plot, and
-                voice. Already have notes? Bring them in.
+                Keep characters, setting, plot, and voice in a story bible.
+                Import your notes.
               </p>
               <div className={styles.worldTabs}>
                 <span>Characters</span>
@@ -331,16 +285,15 @@ export default function LandingSite({
                 <span>Plot & stakes</span>
               </div>
               <div className={styles.character}>
-                <small>Character notes · Sample story</small>
+                <small>Character notes from a sample story</small>
                 <h4>Mara, the keeper&rsquo;s daughter</h4>
-                <p>She came back for answers. The island has other plans.</p>
+                <p>She came back for answers.</p>
               </div>
             </article>
             <article className={styles.exportCard}>
               <h3>Put a book into the world.</h3>
               <p>
-                Set your book details, create a cover, and take your manuscript
-                with you.
+                Set book details, create a cover, and export.
               </p>
               <div
                 className={styles.bookVisual}
@@ -353,7 +306,6 @@ export default function LandingSite({
                     <br />
                     Lighthouse
                   </span>
-                  <small>Your story, bound for somewhere</small>
                 </div>
                 <div className={styles.formats}>
                   <span>.epub</span>
@@ -367,18 +319,18 @@ export default function LandingSite({
             <div>
               <PenIcon />
               <span>
-                Write yourself, upload a draft, or generate from an idea.
+                Write, import, or generate from an idea.
               </span>
             </div>
             <div>
               <LockKeyhole />
               <span>
-                Lock finished chapters and protect the words you love.
+                Lock finished chapters.
               </span>
             </div>
             <div>
               <ShieldCheck />
-              <span>Keep your library local. AI runs only when you ask.</span>
+              <span>Local library. AI on request.</span>
             </div>
           </div>
         </section>
@@ -396,8 +348,7 @@ export default function LandingSite({
               Your choice.
             </h2>
             <p className={styles.sectionIntro}>
-              Connect your own API keys, or use your local Claude or Codex
-              subscription sign-in on desktop.
+              Use API keys or sign in to Claude or Codex locally on desktop.
             </p>
             <div className={styles.providerRow}>
               <span className={styles.provider}>
@@ -410,14 +361,13 @@ export default function LandingSite({
                 <ArrowUpRight size={20} /> OpenRouter
               </span>
               <span className={styles.provider}>
-                <LayersIcon /> NVIDIA NIM
+                <LayersIcon /> Nvidia NIM
               </span>
             </div>
             <p className={styles.aiFoot}>
-              Provider charges and subscription limits apply. Subscription modes
-              are desktop-only and support text. AI requests send relevant
-              writing to your chosen provider; cover art needs an OpenAI API
-              key.
+              Provider charges and limits apply. Desktop subscriptions support
+              text only. Relevant writing goes to your chosen provider; cover
+              art requires an OpenAI API key.
             </p>
           </div>
         </section>
@@ -428,20 +378,15 @@ export default function LandingSite({
           aria-labelledby="download-heading"
         >
           <div className={styles.downloadHeader}>
-            <p className={styles.sectionLabel}>
-              Make room for your next chapter
-            </p>
             <h2 id="download-heading">Your desk. Your studio.</h2>
             <p className={styles.sectionIntro}>
-              Pick your platform. The desktop app brings its own database, so
-              you can get straight to writing.
+              Desktop keeps its own database. Choose your platform.
             </p>
           </div>
           <div className={styles.downloadGrid}>
             <article className={styles.downloadCard}>
-              <PlatformIcon platform="mac" />
               <h3>macOS</h3>
-              <p>Apple Silicon · DMG</p>
+              <p>Apple Silicon, DMG</p>
               <a href={downloads.macArm ?? releaseLink}>
                 {downloads.macArm
                   ? "Download for Apple Silicon"
@@ -457,9 +402,8 @@ export default function LandingSite({
               </small>
             </article>
             <article className={styles.downloadCard}>
-              <PlatformIcon platform="windows" />
               <h3>Windows</h3>
-              <p>x64 · EXE installer</p>
+              <p>x64, EXE installer</p>
               <a href={downloads.windows ?? releaseLink}>
                 {downloads.windows ? "Download for Windows" : "Check Windows downloads"}
                 <ArrowDownToLine size={16} />
@@ -467,9 +411,8 @@ export default function LandingSite({
               <small>{downloads.version ?? "See published releases for availability"}</small>
             </article>
             <article className={styles.downloadCard}>
-              <PlatformIcon platform="linux" />
               <h3>Linux</h3>
-              <p>x64 · AppImage & Debian</p>
+              <p>x64, AppImage and Debian</p>
               <a href={downloads.appImage ?? releaseLink}>
                 {downloads.appImage ? "Download AppImage" : "Check Linux downloads"}
                 <ArrowDownToLine size={16} />
@@ -481,17 +424,16 @@ export default function LandingSite({
           <p className={styles.downloadNotes}>
             {hasDownloads
               ? "Early preview. "
-              : "The first desktop preview is awaiting publication. "}
-            Current installers are unsigned; macOS and Windows may warn or block
-            installation. Automatic updates and device sync are not available
-            yet.
+              : "The desktop preview is awaiting publication. "}
+            Installers are unsigned and may trigger macOS or Windows warnings.
+            No automatic updates or device sync yet.
             <br />
             <a
               href={`${REPO}/blob/main/README.md#running-from-source`}
             >
               Prefer running from source?
             </a>{" "}
-            <span aria-hidden="true">·</span>{" "}
+            {" "}
             <a href={releaseLink}>Release notes & all downloads</a>
           </p>
         </section>
@@ -512,12 +454,24 @@ export default function LandingSite({
             </div>
             <div>
               {questions.map(([question, answer]) => (
-                <details key={question}>
+                <details
+                  key={question}
+                  onToggle={(event) => {
+                    const isOpen = event.currentTarget.open;
+                    setOpenQuestions((current) =>
+                      isOpen
+                        ? current.includes(question)
+                          ? current
+                          : [...current, question]
+                        : current.filter((item) => item !== question),
+                    );
+                  }}
+                >
                   <summary>
                     {question}
                     <Plus aria-hidden="true" />
                   </summary>
-                  <p>{answer}</p>
+                  {openQuestions.includes(question) && <p>{answer}</p>}
                 </details>
               ))}
             </div>
@@ -529,7 +483,7 @@ export default function LandingSite({
             <h2 id="closing-heading">
               That story in your head?
               <br />
-              <em>Give it a home.</em>
+              Give it a home.
             </h2>
             <p>
               Bring your notes. Bring your half-finished chapter. Start where
